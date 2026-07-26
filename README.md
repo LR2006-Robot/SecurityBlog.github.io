@@ -1,0 +1,1 @@
+[基于 CVE-2023-21563 漏洞破解 BitLocker 加密](https://lr2006-robot.github.io/SecurityBlog.github.io/2026/05/14/%E5%9F%BA%E4%BA%8E%20CVE-2023-21563%20%E6%BC%8F%E6%B4%9E%E7%A0%B4%E8%A7%A3%20BitLocker%20%E5%8A%A0%E5%AF%86/)
