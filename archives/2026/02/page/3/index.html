@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Dorange">
+    
+    <meta name="description" content="work all day, and then I wake up...">
+    
+    
+    
+    
+    
+    
+    <title>2026 年 2 月归档 | Fiex Reed</title>
+    <link href="https://lr2006-robot.github.io/SecurityBlog.github.io" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/bootstrap.min.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/aos.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/style.css">
+
+    
+<script src="/SecurityBlog.github.io/js/jquery.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/bootstrap.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/aos.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/SecurityBlog.github.io/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/SecurityBlog.github.io/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="/SecurityBlog.github.io/favicon.ico">
+    <link rel="shortcut icon" href="/SecurityBlog.github.io/favicon.ico" type="image/x-icon">
+    <style>
+/* 文章主容器 */
+#article .article-body,
+#article-list .article-body {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+}
+
+/* 侧边栏/卡片也一起加深，不然还是淡 */
+.panel,
+.panel2,
+.panel-gal,
+.list-group-item,
+.breadcrumb,
+.breadcrumb-gal {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+}
+
+/* 文章内容区单独加白背景，文字更清晰 */
+.content-article {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+}
+
+/* 加深文字颜色，对比度拉满 */
+.content-article p,
+.content-article h1,
+.content-article h2,
+.content-article h3,
+.content-article li {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+}
+
+/* 目录基础样式 */
+#toc-panel {
+    width: 100%;
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    box-shadow: 0 0 8px #000 !important;
+    margin-bottom: 30px !important;
+    z-index: 999 !important;
+}
+#toc-panel.fixed {
+    position: fixed !important;
+    top: 80px !important;
+    width: 350px !important;
+}
+#toc-panel .panel-heading {
+    color: #fff !important;
+    background-color: rgba(10,10,0,.7) !important;
+    border-color: #000 !important;
+}
+#toc-list {
+    max-height: calc(100vh - 180px) !important;
+    overflow-y: auto !important;
+}
+#toc-list li {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease !important;
+}
+#toc-list li a {
+    color: #3d4450 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+#toc-list li.toc-level-3 {
+    padding-left: 30px !important;
+}
+#toc-list li.active {
+    background-color: rgba(107, 105, 214, 0.2) !important;
+}
+#toc-list li.active a {
+    color: #6b69d6 !important;
+    font-weight: bold !important;
+}
+
+/* 修复侧边栏宽度 */
+#sidebar {
+    position: relative !important;
+}
+    </style>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.2"></head>
+
+<!-- 🔥 目录吸顶JS脚本（和你参考网站完全一致） -->
+<script>
+$(window).scroll(function() {
+    var toc = $("#toc-panel");
+    var sidebar = $("#sidebar");
+    var scrollTop = $(window).scrollTop();
+    var offsetTop = sidebar.offset().top;
+
+    if (scrollTop > offsetTop - 80) {
+        toc.addClass("fixed");
+    } else {
+        toc.removeClass("fixed");
+    }
+});
+</script>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">
+                
+                <!-- 这里background使用imgs/${logo_image}(路径文件名) -->
+                <style>
+                    /* 一群猫躲在导航栏底边线后面, 平时只露耳朵;
+                       鼠标移上来就依次爬上来, 爪子落在底边线上 */
+                    #gal-header .navbar-brand {
+                        position: relative;
+                        display: block;
+                        width: 240px;
+                        height: 54px;   /* 和导航栏等高, 它的底边就是猫抓的那条"边框" */
+                        overflow: hidden;
+                        background: none;
+                    }
+
+                    #gal-header .navbar-brand .cat {
+                        position: absolute;
+                        bottom: 0;
+                        left: calc(6px + var(--i) * 40px);   /* 40px 间距, 54px 宽 -> 互相压一点, 更像一群 */
+                        width: 54px;
+                        height: 54px;
+                        background: url('/SecurityBlog.github.io/imgs/logo.png') no-repeat center / contain;
+                        /* 静止: 往下推 43px, 露出的 11px 刚好是耳朵(图里耳朵占顶部 6%~15%) */
+                        translate: 0 43px;
+                        transition: translate 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    }
+
+                    /* 延迟只写在 hover 上: 上来时一只只错开, 缩回去时一起走 */
+                    #gal-header .navbar-brand:hover .cat {
+                        translate: 0 0;
+                        transition-delay: calc(var(--i) * 60ms);
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        #gal-header .navbar-brand .cat {
+                            transition: none;
+                        }
+                        #gal-header .navbar-brand:hover .cat {
+                            transition-delay: 0s;
+                        }
+                    }
+                </style>
+                    
+                <div class="navbar-brand"><span class="cat" style="--i: 0"></span><span class="cat" style="--i: 1"></span><span class="cat" style="--i: 2"></span><span class="cat" style="--i: 3"></span><span class="cat" style="--i: 4"></span></div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="current">
+                    <a href="/SecurityBlog.github.io/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98/">RSA加解密专题</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/">密码学数学原理</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories">全部分类</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/RSA/">RSA</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%89%8D%E8%A8%80/">前言</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags">全部标签</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/about">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    <article class="article well article-body" id="article-archive">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">Fiex Reed</a>
+        >
+        <span>归档</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/SecurityBlog.github.io/archives">归档</a>
+            </h1>
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/SecurityBlog.github.io/archives">归档</a>
+                </h4>
+            </div>
+        </center>
+    </div>
+    <div class="content-article" style="margin-top: 30px;">
+        
+        
+                <h1 style="font-size: 24px; margin-top: 40px;">2026年</h1>
+                <div class="alert alert-info" style="font-size: 14px; line-height: 2; font-weight: bold;">
+                
+            <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AApple%20of%20My%20Eye%E3%80%8B/">音乐 - 《Apple of My Eye》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8APatch%20Our%20Memories%E3%80%8B/">音乐 - 《Patch Our Memories》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8ALove%20Yourself%E3%80%8B/">音乐 - 《Love Yourself》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8ADestiny%E3%80%8B/">音乐 - 《Destiny》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8APegan%E3%80%8B/">音乐 - 《Pegan》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/23/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AAnyas%E3%80%8B/">音乐 - 《Anyas》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/23/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AIrresistible%20Love%E3%80%8B/">音乐 - 《Irresistible Love》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/23/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AMarry%20Me%E3%80%8B/">音乐 - 《Marry Me》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/23/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AHi%20Enslie%E3%80%8B/">音乐 - 《Hi Enslie》</a>
+            <br>
+        
+            <a href="/SecurityBlog.github.io/2026/02/23/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AA%20Little%E3%80%8B/">音乐 - 《A Little》</a>
+            <br>
+        
+        
+            </div>
+        
+    </div>
+</article>
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 🔥 仅文章详情页（layout=post）显示目录，隐藏其他模块 -->
+    
+    <!-- 🔥 所有其他页面（主页/归档/标签/关于页）：显示完整侧边栏 -->
+    <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
+<aside id="sidebar-search">
+    <div class="search hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <form class="form-inline clearfix" id="search-form" method="get"
+              action="/SecurityBlog.github.io/search/index.html">
+            <input type="text" name="s" class="form-control" id="searchInput" placeholder="搜索文章~" autocomplete="off">
+            <button class="btn btn-danger btn-gal" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </div>
+</aside>
+    <aside id="sidebar-author">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading" style="text-align: center">
+            <i class="fa fa-quote-left"></i>
+            Dorange
+            <i class="fa fa-quote-right"></i>
+        </div>
+        <div class="author-panel text-center">
+            <img src="/SecurityBlog.github.io/imgs/avatar.jpg" width="140" height="140"
+                 alt="个人头像" class="author-image">
+            <p class="author-description"><p>work all day, and then I wake up…</p>
+</p>
+        </div>
+    </div>
+</aside>
+    
+    <!-- 要配置好leancloud才能开启此小工具 -->
+    
+    
+    <aside id="sidebar-recent_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            近期文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/09/02/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%89%BF%E8%AF%BA%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E5%BA%94%E7%94%A8/">密码学承诺原理以及应用</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/08/22/ZKP%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E7%AE%80%E5%8D%95%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%88%B0ZK-SNARK%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90/">ZKP 原理：从简单多项式到 ZK-SNARK 详细解析</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/05/14/%E5%9F%BA%E4%BA%8ECVE-2023-21563%E6%BC%8F%E6%B4%9E%E7%A0%B4%E8%A7%A3BitLocker%E5%8A%A0%E5%AF%86/">基于 CVE-2023-21563 漏洞破解 BitLocker 加密</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/19/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20Shamir%20%E9%97%A8%E9%99%90%E7%A7%98%E5%AF%86%E5%85%B1%E4%BA%AB%E7%AE%97%E6%B3%95/">加解密模式分析 - Shamir 门限秘密共享算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/19/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20%E5%88%86%E7%BB%84%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析 - 分组模式分析</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/18/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20AES%20%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">加解密模式分析 - AES 加密算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/18/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20DES%20%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">加解密模式分析 - DES 加密算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/17/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20Salsa20%20%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">加解密模式分析 - Salsa20 加密算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/17/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20RC4%20%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">加解密模式分析 - RC4 加密算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/16/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20OTP%20%E4%B8%8E%20PRNG/">加解密模式分析 - OTP 与 PRNG</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-rand_posts">
+    <div class="panel panel-gal recent hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-refresh"></i>
+            随机文章
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/02/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98%20-%20%E5%85%AC%E9%92%A5%E6%8C%87%E6%95%B0%E7%9B%B8%E5%85%B3%E6%94%BB%E5%87%BB/">RSA加解密专题 - 公钥指数相关攻击</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/02/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98%20-%20%E6%A8%A1%E6%95%B0%E7%9B%B8%E5%85%B3%E6%94%BB%E5%87%BB/">RSA加解密专题 - 模数相关攻击</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/03/16/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20OTP%20%E4%B8%8E%20PRNG/">加解密模式分析 - OTP 与 PRNG</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/27/%E5%AF%86%E7%A0%81%E5%AD%A6%E7%AE%97%E6%B3%95%20-%20Wiener%20%E7%AE%97%E6%B3%95/">密码学算法 - Wiener 算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/28/%E5%AF%86%E7%A0%81%E5%AD%A6%E7%AE%97%E6%B3%95%20-%20Miller-Rabin%20%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/">密码学算法 - Miller-Rabin 素数检验</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/27/%E5%AF%86%E7%A0%81%E5%AD%A6%E7%AE%97%E6%B3%95%20-%20%E8%BF%9E%E5%88%86%E6%95%B0%E7%AE%97%E6%B3%95/">密码学算法 - 连分数算法</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AFlash%E3%80%8B/">音乐 - 《Flash》</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8ALove%20Yourself%E3%80%8B/">音乐 - 《Love Yourself》</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/25/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8AMischievous%20Girl%E3%80%8B/">音乐 - 《Mischievous Girl》</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/2026/02/24/%E9%9F%B3%E4%B9%90%20-%20%E3%80%8ASophias%E3%80%8B/">音乐 - 《Sophias》</a>
+                </span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+    
+    
+    <aside id="sidebar-archives">
+    <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-archive"></i>
+            归档
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/archives/2026/09/">2026 年 9 月</a>
+                </span>
+                <span class="badge">1</span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/archives/2026/08/">2026 年 8 月</a>
+                </span>
+                <span class="badge">1</span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/archives/2026/05/">2026 年 5 月</a>
+                </span>
+                <span class="badge">1</span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/archives/2026/03/">2026 年 3 月</a>
+                </span>
+                <span class="badge">29</span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/SecurityBlog.github.io/archives/2026/02/">2026 年 2 月</a>
+                </span>
+                <span class="badge">38</span>
+            </li>
+            
+        </ul>
+    </div>
+</aside>
+
+    
+    
+    <aside id="sidebar-webinfo">
+    <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+        <div class="panel-heading">
+            <i class="fa fa-info-circle"></i>
+            网站信息
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <span class="post-title">文章数目</span>
+                <span class="badge">70</span>
+            </li>
+            <li class="list-group-item">
+                <span class="post-title">标签数目</span>
+                <span class="badge">22</span>
+            </li>
+            <li class="list-group-item">
+                <span class="post-title">分类数目</span>
+                <span class="badge">8</span>
+            </li>
+            <li class="list-group-item">
+                <span class="post-title">本站访客数</span>
+                <!-- 不蒜子填值; 服务不可用时就停在占位符 - -->
+                <span class="badge"><span id="busuanzi_value_site_uv">-</span></span>
+            </li>
+            <li class="list-group-item">
+                <span class="post-title">本站总浏览量</span>
+                <span class="badge"><span id="busuanzi_value_site_pv">-</span></span>
+            </li>
+        </ul>
+    </div>
+</aside>
+
+    
+
+    
+    <aside id="gal-sets">
+        <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
+            <ul class="nav nav-pills pills-gal">
+                
+                <li>
+                    <a href="/SecurityBlog.github.io/archives/2026/02/page/3/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/SecurityBlog.github.io/archives/2026/02/page/3/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                </li>
+                
+                
+                <li>
+                    <a href="/SecurityBlog.github.io/archives/2026/02/page/3/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                
+                <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
+    <a href="/SecurityBlog.github.io/tags/CVE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" style="font-size: 12px;">CVE漏洞复现</a> <a href="/SecurityBlog.github.io/tags/RSA/" style="font-size: 16px;">RSA</a> <a href="/SecurityBlog.github.io/tags/SageMath/" style="font-size: 12px;">SageMath</a> <a href="/SecurityBlog.github.io/tags/ZKP/" style="font-size: 12.67px;">ZKP</a> <a href="/SecurityBlog.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AF%86%E7%A0%81/" style="font-size: 12px;">分布式密码</a> <a href="/SecurityBlog.github.io/tags/%E5%88%86%E7%B1%BB/" style="font-size: 12px;">分类</a> <a href="/SecurityBlog.github.io/tags/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81/" style="font-size: 13.33px;">分组密码</a> <a href="/SecurityBlog.github.io/tags/%E5%89%8D%E8%A8%80/" style="font-size: 14px;">前言</a> <a href="/SecurityBlog.github.io/tags/%E5%8A%A0%E8%A7%A3%E5%AF%86/" style="font-size: 18px;">加解密</a> <a href="/SecurityBlog.github.io/tags/%E5%8F%A4%E5%85%B8%E5%AF%86%E7%A0%81/" style="font-size: 13.33px;">古典密码</a> <a href="/SecurityBlog.github.io/tags/%E5%AE%8C%E6%95%B4%E6%94%BB%E5%87%BB%E9%93%BE/" style="font-size: 12px;">完整攻击链</a> <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 20px;">密码学</a> <a href="/SecurityBlog.github.io/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 14.67px;">对称加密</a> <a href="/SecurityBlog.github.io/tags/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/" style="font-size: 12.67px;">抽象代数</a> <a href="/SecurityBlog.github.io/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 18.67px;">数学</a> <a href="/SecurityBlog.github.io/tags/%E6%95%B0%E8%AE%BA/" style="font-size: 15.33px;">数论</a> <a href="/SecurityBlog.github.io/tags/%E6%B5%81%E5%AF%86%E7%A0%81/" style="font-size: 13.33px;">流密码</a> <a href="/SecurityBlog.github.io/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 12px;">环境配置</a> <a href="/SecurityBlog.github.io/tags/%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81/" style="font-size: 17.33px;">现代密码</a> <a href="/SecurityBlog.github.io/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/SecurityBlog.github.io/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 14.67px;">非对称加密</a> <a href="/SecurityBlog.github.io/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 19.33px;">音乐</a>
+</div>
+                
+                
+                <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
+    
+    <li>
+        <a href="https://lr2006-robot.github.io/myblog.github.io/" target="_blank">Alice and Bobの神秘小屋</a>
+    </li>
+    
+</div>
+                
+                
+                <div class="links tab-pane nav bs-sidenav fade" id="sidebar-links">
+    
+    <li>
+        <a href="https://github.com/LR2006-Robot" target="_blank">Github</a>
+    </li>
+    
+</div>
+                
+            </div>
+        </div>
+    </aside>
+    
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 Dorange Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/SecurityBlog.github.io/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/SecurityBlog.github.io/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '14'
+    }
+    window.doroImg = '/SecurityBlog.github.io/imgs/doro.jpg'
+    window.doroLive2D = {
+      model: '/SecurityBlog.github.io/imgs/Dororong_Meme_Live2D_Model__By_0x4682B4_/Doro/Doro.model3.json',
+      js: [
+        '/SecurityBlog.github.io/js/live2d/live2dcubismcore.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi-live2d-display.min.js'
+      ]
+    }
+</script>
+
+<!-- 不蒜子: 访客数/浏览量统计, 数据经第三方服务器(busuanzi.ibruce.info) -->
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/SecurityBlog.github.io/js/hs.js"></script>
+<script src="/SecurityBlog.github.io/js/blog.js"></script>
+
+
+
+
+</html>

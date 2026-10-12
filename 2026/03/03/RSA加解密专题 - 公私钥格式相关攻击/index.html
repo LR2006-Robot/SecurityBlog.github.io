@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Dorange">
+    
+    <meta name="description" content="work all day, and then I wake up...">
+    
+    
+    
+    
+    
+    
+    <title>RSA加解密专题 - 公私钥格式相关攻击 | Fiex Reed</title>
+    <link href="https://lr2006-robot.github.io/SecurityBlog.github.io" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/bootstrap.min.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/aos.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/style.css">
+
+    
+<script src="/SecurityBlog.github.io/js/jquery.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/bootstrap.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/aos.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/SecurityBlog.github.io/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/SecurityBlog.github.io/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="/SecurityBlog.github.io/favicon.ico">
+    <link rel="shortcut icon" href="/SecurityBlog.github.io/favicon.ico" type="image/x-icon">
+    <style>
+/* 文章主容器 */
+#article .article-body,
+#article-list .article-body {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+}
+
+/* 侧边栏/卡片也一起加深，不然还是淡 */
+.panel,
+.panel2,
+.panel-gal,
+.list-group-item,
+.breadcrumb,
+.breadcrumb-gal {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+}
+
+/* 文章内容区单独加白背景，文字更清晰 */
+.content-article {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+}
+
+/* 加深文字颜色，对比度拉满 */
+.content-article p,
+.content-article h1,
+.content-article h2,
+.content-article h3,
+.content-article li {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+}
+
+/* 目录基础样式 */
+#toc-panel {
+    width: 100%;
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    box-shadow: 0 0 8px #000 !important;
+    margin-bottom: 30px !important;
+    z-index: 999 !important;
+}
+#toc-panel.fixed {
+    position: fixed !important;
+    top: 80px !important;
+    width: 350px !important;
+}
+#toc-panel .panel-heading {
+    color: #fff !important;
+    background-color: rgba(10,10,0,.7) !important;
+    border-color: #000 !important;
+}
+#toc-list {
+    max-height: calc(100vh - 180px) !important;
+    overflow-y: auto !important;
+}
+#toc-list li {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease !important;
+}
+#toc-list li a {
+    color: #3d4450 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+#toc-list li.toc-level-3 {
+    padding-left: 30px !important;
+}
+#toc-list li.active {
+    background-color: rgba(107, 105, 214, 0.2) !important;
+}
+#toc-list li.active a {
+    color: #6b69d6 !important;
+    font-weight: bold !important;
+}
+
+/* 修复侧边栏宽度 */
+#sidebar {
+    position: relative !important;
+}
+    </style>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.2"></head>
+
+<!-- 🔥 目录吸顶JS脚本（和你参考网站完全一致） -->
+<script>
+$(window).scroll(function() {
+    var toc = $("#toc-panel");
+    var sidebar = $("#sidebar");
+    var scrollTop = $(window).scrollTop();
+    var offsetTop = sidebar.offset().top;
+
+    if (scrollTop > offsetTop - 80) {
+        toc.addClass("fixed");
+    } else {
+        toc.removeClass("fixed");
+    }
+});
+</script>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">
+                
+                <!-- 这里background使用imgs/${logo_image}(路径文件名) -->
+                <style>
+                    /* 一群猫躲在导航栏底边线后面, 平时只露耳朵;
+                       鼠标移上来就依次爬上来, 爪子落在底边线上 */
+                    #gal-header .navbar-brand {
+                        position: relative;
+                        display: block;
+                        width: 240px;
+                        height: 54px;   /* 和导航栏等高, 它的底边就是猫抓的那条"边框" */
+                        overflow: hidden;
+                        background: none;
+                    }
+
+                    #gal-header .navbar-brand .cat {
+                        position: absolute;
+                        bottom: 0;
+                        left: calc(6px + var(--i) * 40px);   /* 40px 间距, 54px 宽 -> 互相压一点, 更像一群 */
+                        width: 54px;
+                        height: 54px;
+                        background: url('/SecurityBlog.github.io/imgs/logo.png') no-repeat center / contain;
+                        /* 静止: 往下推 43px, 露出的 11px 刚好是耳朵(图里耳朵占顶部 6%~15%) */
+                        translate: 0 43px;
+                        transition: translate 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    }
+
+                    /* 延迟只写在 hover 上: 上来时一只只错开, 缩回去时一起走 */
+                    #gal-header .navbar-brand:hover .cat {
+                        translate: 0 0;
+                        transition-delay: calc(var(--i) * 60ms);
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        #gal-header .navbar-brand .cat {
+                            transition: none;
+                        }
+                        #gal-header .navbar-brand:hover .cat {
+                            transition-delay: 0s;
+                        }
+                    }
+                </style>
+                    
+                <div class="navbar-brand"><span class="cat" style="--i: 0"></span><span class="cat" style="--i: 1"></span><span class="cat" style="--i: 2"></span><span class="cat" style="--i: 3"></span><span class="cat" style="--i: 4"></span></div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98/">RSA加解密专题</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/">密码学数学原理</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories">全部分类</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/RSA/">RSA</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%89%8D%E8%A8%80/">前言</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags">全部标签</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/about">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">Fiex Reed</a>
+        >
+        <span>RSA加解密专题 - 公私钥格式相关攻击</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/SecurityBlog.github.io/2026/03/03/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98%20-%20%E5%85%AC%E7%A7%81%E9%92%A5%E6%A0%BC%E5%BC%8F%E7%9B%B8%E5%85%B3%E6%94%BB%E5%87%BB/">RSA加解密专题 - 公私钥格式相关攻击</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/RSA/">RSA</a>
+                
+            </span>
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2026-03-03
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/SecurityBlog.github.io/2026/03/03/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98%20-%20%E5%85%AC%E7%A7%81%E9%92%A5%E6%A0%BC%E5%BC%8F%E7%9B%B8%E5%85%B3%E6%94%BB%E5%87%BB/">RSA加解密专题 - 公私钥格式相关攻击</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2026-03-03
+            </p>
+            <p>
+                
+                <i class="fa fa-tags"></i>
+                
+                <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/RSA/">RSA</a>
+                
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p>pem 格式的文件通常用于数字证书认证机构(Certificate Authorities，CA)，其文件形式主要为 base64 编码的文件，头尾有类似于——-BEGIN PUBLIC KEY——-和——-END PUBLIC KEY——-的头尾标记</p>
+<p>本文的目的就是如何从 .pem 格式的证书中，获取公钥、私钥信息。在 RSA 加密中，实际上公钥和私钥都是由一系列数字组成的，这些数字在.pem格式的证书中以特定的格式存储。通过解析这些数字，我们可以获取到公钥和私钥的相关信息，从而进行加密和解密操作。</p>
+<h2 id="PEM文件生成与使用-🥳">PEM文件生成与使用 🥳</h2>
+<p>在python中，可以通过 <code>from Crypto.PublicKey import RSA</code> 生成想要的公私钥文件。</p>
+<p>生成公钥文件的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line">p,q = getPrime(<span class="number">512</span>),getPrime(<span class="number">512</span>)</span><br><span class="line">n = p * q</span><br><span class="line">e = <span class="number">0x10001</span></span><br><span class="line">pub = RSA.construct((n,e))</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;out.pem&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(pub.exportKey(<span class="string">&#x27;PEM&#x27;</span>))</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;out.pem&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="built_in">print</span>(f.read().decode())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCuRPouMRTcLWPBEUlhjCrZ6MNQ</span></span><br><span class="line"><span class="string">rSy29BrHjH4+lGMykB23azPtT9fk7IsEFXoodm6tsPL8kheJ6cP+0WPldlQOw/K3</span></span><br><span class="line"><span class="string">c9LUGzeCCAhNJuBjUoeW32ruE2HS7RoIF6vkP36zLs167ZZMK7Fg0cqW6VNXoJHT</span></span><br><span class="line"><span class="string">zaKdqysBe+3W1VHl6QIDAQAB</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>生成私钥文件的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line">p,q = getPrime(<span class="number">512</span>),getPrime(<span class="number">512</span>)</span><br><span class="line">n = p * q</span><br><span class="line">e = <span class="number">0x10001</span></span><br><span class="line">d = inverse(e,(p - <span class="number">1</span>) * (q - <span class="number">1</span>))</span><br><span class="line">pub = RSA.construct((n,e,d,p,q))</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;out.pem&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(pub.exportKey(<span class="string">&#x27;PEM&#x27;</span>))</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;out.pem&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="built_in">print</span>(f.read().decode())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">-----BEGIN RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">MIICXAIBAAKBgQCnHIvLP0IERPVRaED+71dlCRBcm3be4jlHgqVqIIXyIvrzc8ZC</span></span><br><span class="line"><span class="string">IIbIDqlBybNgq32i6PVlzBCsWiiTfBYS6J24qCjYVTywKk+yieNshieNNohmvQRF</span></span><br><span class="line"><span class="string">bZOZITJiP99URkhtGWo3trQfoAZEQ7NfMoS1N3PDvPet1lMfFK81AyWt1wIDAQAB</span></span><br><span class="line"><span class="string">AoGAIq74DK0KZJxzVfwPUVoXh27EKJRTrZrCTKc+8bHiWwkLkK+8vEjH8Imqc28L</span></span><br><span class="line"><span class="string">fcrZ/o/fLsuVwk/MECA27KG+6hiRPJDWZmFgCInCABuhd+xitSBciMSGrO5ITjoq</span></span><br><span class="line"><span class="string">YdgMsR5xJTI8vhXIJ1iCkkCz6fD6Di7s+3n/+Ti3iuK87jECQQDOY/pLyH0ppOk0</span></span><br><span class="line"><span class="string">49pieQRshckQMXqsKhahEDZmWMu70JqDLF0U3aIfup1R87uogB8hJj8+K5RQavG4</span></span><br><span class="line"><span class="string">4l0W5ghTAkEAz0eTNEWTe2iJ/Dq+8JKTN/MA/a8MiG7wvAkXqjx+B+Eow77IdoN8</span></span><br><span class="line"><span class="string">D5ehD0x6ou73yaorTddidDAplNmvyq0D7QJAJbcPXhndBWclVozss2H59Prdqx/f</span></span><br><span class="line"><span class="string">kuZ+DCCyUDGZyVBta9sHh3CY18N6TCeF+1yuU5hxpiLAj5F7apWy/SQ8EQJBAMtv</span></span><br><span class="line"><span class="string">AxGda6cGLc8o1PeF1AlobUONxy4sPAdAoUJKRqNzH7AmEdcHKv6eoctDE2XQRc9e</span></span><br><span class="line"><span class="string">PUwTpSRFlLnrgLXZYu0CQBKKT+oY4ssnwKDQqGPsh9MtPyilySL9sWJilk1cSXmQ</span></span><br><span class="line"><span class="string">Xm7gjDq5S/x4k1gJyQFXbUnxTfsbLWs6BljHHlKSRes=</span></span><br><span class="line"><span class="string">-----END RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>如果是生成一组随机的公私钥文件，可以直接直接使用 RSA.generate(bits)，其中的 bits 参数为生成的公钥文件中n的二进制位数，且 bits&gt;=1024，默认为 1024。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line">key = RSA.generate(<span class="number">1024</span>)</span><br><span class="line"><span class="built_in">print</span>(key.publickey)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;out.pem&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(key.exportKey(<span class="string">&#x27;PEM&#x27;</span>))</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;out.pem&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="built_in">print</span>(f.read().decode())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;bound method RsaKey.public_key of RsaKey(n=99929675131146107818047790971049703803161677332600984800831117021637597471437271599719384035180982326470249457001083005224626356572009901255841391966616564984242588913592789383087326511196585443834216472384770224810255153922375944881215835774119177009570247468911673932973239275741131654695253944455708641727, e=65537, d=27501740780061900509028777360107084282858928440567277451824014559115713670042546183199393779857817534085793587304881725189343016621314014739780326627796196251470626677550096120689732366473717193895036548926100990548453802714993577259273117223098888966957225092204230317866243049867167880710514827901086931493, p=9959145719455053414348729655771312861460726396890001110536788452571591154277537325754067618769136991544158484849077735057792084414015625760536769751415507, q=10033960536990122517580769502852456118641921945920255759007869111269242067226468943041901092934902353013133963062909073461567977701122665256982872188799461, u=2111771661302217183343493746406805348965531581492223651147849337466575464897027597797323383307376291792334461891498947953036261381547003770335520720819326)&gt;</span></span><br><span class="line"><span class="string">-----BEGIN RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">MIICXQIBAAKBgQCOTfkFWAc5UsCT07Y4bU9jKfpT5pt+ScHFIk/39jsE8yDHSFAo</span></span><br><span class="line"><span class="string">pcQMlJ6GKRYfU7F/3xbY2udbvXBj9jJVLBmh3ORbZT06xwYDeqhvE2kJB+QfGk+J</span></span><br><span class="line"><span class="string">POqzjCkFiDorxMUzWEq4us8nXmkv6WsrJMGSQZ0SQ7c29N9M0/8K622JvwIDAQAB</span></span><br><span class="line"><span class="string">AoGAJyntaVuXLV8JcgW3piLrUNLKOpICZEi/Q9ZUJN2G069n64CK0wz//ihe0nR3</span></span><br><span class="line"><span class="string">SqrZdGQ84PSp7LUfu9sTch5fdSQLH/OAQtVf/rwWuwulm8wS0njrU9xxQQWrwZoe</span></span><br><span class="line"><span class="string">L9W7DlBWf5+PbmYdgyoLIwL3+wskvxiWswlvVcSR7RkXGiUCQQC+J0pN+1W2U3qe</span></span><br><span class="line"><span class="string">a8rhAwX7XMSXoblFuqfBfH/duLZvseEEjtuTcj0ISlJgts2aZT1J8yHnllUoiqAu</span></span><br><span class="line"><span class="string">WQPUK/rTAkEAv5T6OwPHj+4J/4WzQgJTN89Xj9ihR45wpr8Rr6WPXUCgXTe82UFz</span></span><br><span class="line"><span class="string">ny68nIzALvKrLTf58yu8/E5wy2+SejBJ5QJASNUnwsK3y8QhvTgwVwsfaW3Y5vNM</span></span><br><span class="line"><span class="string">0YZy5stW9offaNzLAUHunIUvF1PQRbb+/Vo1pXN40wljyMmAHQB/VO8bfQJBAIGQ</span></span><br><span class="line"><span class="string">nVKAEdyzHavjngHMVL9vyEYOObSNDn6Wxb1GeJiWdl3UrjE35JwJHaG6Rtb5Yu7n</span></span><br><span class="line"><span class="string">5nCgaeUwn3PV9vgP5EkCQQCWIiD5b8Qb5Mma8/iDNhchmRkosUug/iCBeqNh3nJc</span></span><br><span class="line"><span class="string">txZnUy1fjc0toXxJY3ZBzTl3TNsk8p8x4H9y/NXoDtvu</span></span><br><span class="line"><span class="string">-----END RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>在 python 中，利用公私钥文件，通过 PKCS1_OAEP 算法填充可以实现加解密，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> PKCS1_OAEP</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line">flag = <span class="string">b&#x27;This_is_a_message_qwer&#x27;</span></span><br><span class="line">​</span><br><span class="line">key = RSA.generate(<span class="number">1024</span>)</span><br><span class="line">pub = key.publickey().exportKey()</span><br><span class="line">public_key = RSA.importKey(pub)</span><br><span class="line">pk = PKCS1_OAEP.new(public_key)</span><br><span class="line">enc = pk.encrypt(flag)</span><br><span class="line"><span class="built_in">print</span>(enc)</span><br><span class="line">​</span><br><span class="line">priv = key.exportKey()</span><br><span class="line">priv_key = RSA.importKey(priv)</span><br><span class="line">sk = PKCS1_OAEP.new(priv_key)</span><br><span class="line">msg = sk.decrypt(enc)</span><br><span class="line"><span class="built_in">print</span>(msg)</span><br><span class="line"><span class="comment"># b&#x27;\xd1/Ou\xae\xba]z\xc0\t\xc6\xd7\xc4f\x13\x96\x9a\xeb5\xdb8\x92\xc7\x19\x12y\x9c\x18\xf7A\x9d\xe9\n&amp;=&lt;\x16\x07\xefz\xad2-\x983\xec\x932\xcb\xf0\x87~\xdf\xc1\xd2\x9f\xd7@\\H\x1f\x87#\xf3\x84\xa0\xfc\xd9\xcfV$&gt;\xd7Of\xe6G\x06\xcb\x91\xa1\xcc\x0c\xad\xc2\x9a\xad\xe46\x91x\xad\xa51\xbb\xfb\xc1E\x93~e%\xd1~\xf8l\x19n\x88\xff\xac^\xca\x8fs*&#125;\xb9c0\xc0N\xf2\xfa\xa4\xd8\x18g&#x27;</span></span><br><span class="line"><span class="comment"># b&#x27;This_is_a_message_qwer&#x27;</span></span><br></pre></td></tr></table></figure>
+<h2 id="PEM文件解析-🤠">PEM文件解析 🤠</h2>
+<p>在文件进行 base64 解码后，可以看到 pem 文件的结构（专门用于 RSA 私钥）如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">RSAPrivateKey ::= SEQUENCE &#123;</span><br><span class="line">    version           Version,     0表示两个素数的RSA  1表示多素数的RSA</span><br><span class="line">    modulus           INTEGER,  -- n</span><br><span class="line">    publicExponent    INTEGER,  -- e</span><br><span class="line">    privateExponent   INTEGER,  -- d</span><br><span class="line">    prime1            INTEGER,  -- p</span><br><span class="line">    prime2            INTEGER,  -- q</span><br><span class="line">    exponent1         INTEGER,  -- d mod (p-1) dp</span><br><span class="line">    exponent2         INTEGER,  -- d mod (q-1) dq</span><br><span class="line">    coefficient       INTEGER,  -- (inverse of q) mod p</span><br><span class="line">    otherPrimeInfos   OtherPrimeInfos OPTIONAL</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">十六进制格式如下：</span><br><span class="line">表示头 30</span><br><span class="line">表示长度 82 xx xx</span><br><span class="line">版本信息 02 01 00</span><br><span class="line">n 02 xx xx</span><br><span class="line">e 02 xx</span><br><span class="line">d 02 xx xx</span><br><span class="line">p 02 xx</span><br><span class="line">q 02 xx</span><br><span class="line">dp 02 xx</span><br><span class="line">dq 02 xx</span><br><span class="line">inv 02 xx</span><br><span class="line">如果数据长度超过 128 字节，则长度部分会多出两个字节表示实际长度</span><br></pre></td></tr></table></figure>
+<p>对于完整的 pem 格式文件，我们可以使用 openssl 工具进行解析，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">读公钥 openssl rsa -pubin -text -modulus -<span class="keyword">in</span> 1.pem</span><br><span class="line">读私钥 openssl rsa -<span class="keyword">in</span> 1.pem -text</span><br></pre></td></tr></table></figure>
+<p>当然，对于残缺的 pem 格式文件，我们也可以 base64 解码后，通过分析上述结构，手动解析出其中的数字信息，这也是我们重点讲解的内容。</p>
+<h2 id="残缺私钥解析-👻">残缺私钥解析 👻</h2>
+<p>我们从上面的结构知道，我们要的数据都是以 02 开头的整数类型，后面跟着长度和数据内容。对于残缺的 pem 格式文件，我们可以通过分析这些整数类型的数据，来获取我们需要的信息。</p>
+<h3 id="残缺私钥解析例题">残缺私钥解析例题</h3>
+<p><a target="_blank" rel="noopener" href="https://files.catbox.moe/8052x0.zip">残缺私钥解析例题下载</a></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Ciphertext = 0x6d482cbbc60b146ce064754910f5ce845a6eedeff2a20589b97c342677219c324debe4fc7324106bbeccc633ec819383f019856e700f027a39987500873a5700491f2828df4d5c01d179febac4f7589ed6846701e4d78daea6265df0fe1853e43984a3760b5257144842f9f4d316c3d314dfedb2ded08b90b957bf040258400a</span><br><span class="line"></span><br><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">MIICewIBAAKBgQCdA0+pqynKvc3/BH5ojnUABMdWy9Lzi9TwSAOgiJ6ky//QBrWG</span><br><span class="line">CNAn98CYNcoKuA2yOtHKIjAUrPh+LdgjmW+/pAWPJyrnoQw5SqD+FvqNTjG7AkvA</span><br><span class="line">+TUAyMflL9qodrWBEbl/AmN01Qbivo36+U1mFDB+6LENk/3BwWAHVj0DvQIhAL7t</span><br><span class="line">Vc3/3jEFe+pAWKNoTV++2B8D1T+ii7ZYsy3kU1yNAoGAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAkCQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkEAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAwJAJrKFhI5pl/oBN2BZqLTf+NAcGqTFrzmbi7RVFAN43kAYAu11urAy</span><br><span class="line">LTncfJABpRhtGFdsL31jiswhiYRp9yjT+wJBAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMCQQAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><br><span class="line">AAAAAAAAAAAAAAAAAAAA</span><br><span class="line">-----END RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+<p>在这个例题中，我们可以看到，私钥文件中的一些数据残缺了，不过我们可以通过解码后的 02 头直接解析，因为数据的顺序都是严格按照上面的结构来的。</p>
+<p>解析代码示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">s = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">-----BEGIN RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">MIICewIBAAKBgQCdA0+pqynKvc3/BH5ojnUABMdWy9Lzi9TwSAOgiJ6ky//QBrWG</span></span><br><span class="line"><span class="string">CNAn98CYNcoKuA2yOtHKIjAUrPh+LdgjmW+/pAWPJyrnoQw5SqD+FvqNTjG7AkvA</span></span><br><span class="line"><span class="string">+TUAyMflL9qodrWBEbl/AmN01Qbivo36+U1mFDB+6LENk/3BwWAHVj0DvQIhAL7t</span></span><br><span class="line"><span class="string">Vc3/3jEFe+pAWKNoTV++2B8D1T+ii7ZYsy3kU1yNAoGAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAkCQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkEAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAwJAJrKFhI5pl/oBN2BZqLTf+NAcGqTFrzmbi7RVFAN43kAYAu11urAy</span></span><br><span class="line"><span class="string">LTncfJABpRhtGFdsL31jiswhiYRp9yjT+wJBAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMCQQAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">-----END RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">s = b64decode(s)</span><br><span class="line"><span class="built_in">print</span>(binascii.hexlify(s))</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;手动分行解析，注意02后面的长度部分，这是我们确定数据长度的方式，如果长度超过128字节，则会多出两个字节表示实际长度</span></span><br><span class="line"><span class="string">3082027b</span></span><br><span class="line"><span class="string">020100</span></span><br><span class="line"><span class="string">028181 #n</span></span><br><span class="line"><span class="string">009d034fa9ab29cabdcdff047e688e751704c756cbd2f38bd4f049a3a0889ea4cbffd006b58608d6a7f7c09835ca0abb1db23ad1ca223c54acf87e2dd823996fbfa5a58f272ae7a10c394aa0fe16fa8d4e31bb024bf1f93517c8c7e52fdaa876b58111b97fc66374d506e2be8dfaf94d6614307ee8b10d93fdc1c165c7563d03bd</span></span><br><span class="line"><span class="string">0221   #e</span></span><br><span class="line"><span class="string">00beed55cdffde31057bea5a58a3684d5fbed81f03d53fa28bb658b32de4535c8d</span></span><br><span class="line"><span class="string">028180 #d</span></span><br><span class="line"><span class="string">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009</span></span><br><span class="line"><span class="string">0241   #p</span></span><br><span class="line"><span class="string">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="string">0241   #q</span></span><br><span class="line"><span class="string">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003</span></span><br><span class="line"><span class="string">0240   #dp</span></span><br><span class="line"><span class="string">26b285848e6997fa01376059a8b4dff8d69c1aa4c5af399b8bb45515a378de45d85eed75bab5f22d39dc7c95c1a5186d18576c2f7d638acc21898469f728d3fb</span></span><br><span class="line"><span class="string">0241   #dq</span></span><br><span class="line"><span class="string">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003</span></span><br><span class="line"><span class="string">0241   #inv</span></span><br><span class="line"><span class="string">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>通过上述代码，我们可以成功解析出私钥中的各个参数，我们发现就是一个 
+    <span id="mjx-b0060d7">
+      <style>
+
+        display:contents;
+        mjx-assistive-mml {
+          user-select: text !important;
+          clip: auto !important;
+          color: rgba(0,0,0,0);
+        }
+        
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+      
+span[id^="mjx-"]{display:contents}
+</style>
+      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.65ex;" xmlns="http://www.w3.org/2000/svg" width="2.169ex" height="2.22ex" role="img" focusable="false" viewBox="0 -694 958.7 981.2" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mi" transform="translate(553,-150) scale(0.707)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>d</mi><mi>p</mi></msub></math></mjx-assistive-mml></mjx-container>
+    </span>
+   泄露的情况，利用这个参数，我们可以通过以下代码计算出 
+    <span id="mjx-fcff4af">
+      
+      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="1.138ex" height="1.439ex" role="img" focusable="false" viewBox="0 -442 503 636" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi></math></mjx-assistive-mml></mjx-container>
+    </span>
+   和 
+    <span id="mjx-ad32126">
+      
+      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="1.041ex" height="1.439ex" role="img" focusable="false" viewBox="0 -442 460 636" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D45E" d="M33 157Q33 258 109 349T280 441Q340 441 372 389Q373 390 377 395T388 406T404 418Q438 442 450 442Q454 442 457 439T460 434Q460 425 391 149Q320 -135 320 -139Q320 -147 365 -148H390Q396 -156 396 -157T393 -175Q389 -188 383 -194H370Q339 -192 262 -192Q234 -192 211 -192T174 -192T157 -193Q143 -193 143 -185Q143 -182 145 -170Q149 -154 152 -151T172 -148Q220 -148 230 -141Q238 -136 258 -53T279 32Q279 33 272 29Q224 -10 172 -10Q117 -10 75 30T33 157ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>q</mi></math></mjx-assistive-mml></mjx-container>
+    </span>
+   的值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes, bytes_to_long, inverse, GCD</span><br><span class="line"><span class="keyword">from</span> secret <span class="keyword">import</span> m</span><br><span class="line"></span><br><span class="line">n_hex = <span class="string">&quot;0x9d034fa9ab29cabdcdff047e688e751704c756cbd2f38bd4f049a3a0889ea4cbffd006b58608d6a7f7c09835ca0abb1db23ad1ca223c54acf87e2dd823996fbfa5a58f272ae7a10c394aa0fe16fa8d4e31bb024bf1f93517c8c7e52fdaa876b58111b97fc66374d506e2be8dfaf94d6614307ee8b10d93fdc1c165c7563d03bd&quot;</span></span><br><span class="line">n = <span class="built_in">int</span>(n_hex,<span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">e_hex = <span class="string">&quot;0xbeed55cdffde31057bea5a58a3684d5fbed81f03d53fa28bb658b32de4535c8d&quot;</span></span><br><span class="line">e = <span class="built_in">int</span>(e_hex,<span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">c_hex = <span class="string">&quot;0x6d482cbbc60b146ce064754910f5ce845a6eedeff2a20589b97c342677219c324debe4fc7324106bbeccc633ec819383f019856e700f027a39987500873a5700491f2828df4d5c01d179febac4f7589ed6846701e4d78daea6265df0fe1853e43984a3760b5257144842f9f4d316c3d314dfedb2ded08b90b957bf040258400a&quot;</span></span><br><span class="line">c = <span class="built_in">int</span>(c_hex,<span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">dp_hex = <span class="string">&quot;0x26b285848e6997fa01376059a8b4dff8d69c1aa4c5af399b8bb45515a378de45d85eed75bab5f22d39dc7c95c1a5186d18576c2f7d638acc21898469f728d3fb&quot;</span></span><br><span class="line">dp = <span class="built_in">int</span>(dp_hex,<span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">p = GCD((<span class="built_in">pow</span>(<span class="number">2</span>,e*dp,n) -<span class="number">2</span>) ,n)</span><br><span class="line">q = n // p</span><br><span class="line"><span class="keyword">if</span> n == p * q <span class="keyword">and</span> p &gt; <span class="number">1</span> <span class="keyword">and</span> q &gt; <span class="number">1</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;成功分解n:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;p =&quot;</span>, p)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;q =&quot;</span>, q)</span><br><span class="line">    phi = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">    d = inverse(e, phi)</span><br><span class="line">    m = <span class="built_in">pow</span>(c, d, n)</span><br><span class="line">    <span class="built_in">print</span>(long_to_bytes(m))</span><br><span class="line"><span class="comment"># b&#x27;flag&#123;u_know_the_pem_structure&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>上一章：<a href="http://lr2006-robot.github.io/myblog.github.io/post/4003.html">RSA加解密专题 - 私钥 d 相关攻击</a> 👈<br>
+下一章：<a href="http://lr2006-robot.github.io/myblog.github.io/post/4005.html">RSA加解密专题 - Coppersmith 相关攻击一</a> 👈<br>
+回到开始：<a href="http://lr2006-robot.github.io/myblog.github.io/about/">关于我</a> 👈</p>
+
+    </div>
+</article>
+
+
+<script>
+// 等页面加载完成后执行
+window.addEventListener('load', function() {
+  const content = document.querySelector('.content-article');
+  const tocList = document.getElementById('toc-list');
+  const tocPanel = document.getElementById('toc-panel');
+  
+  // 如果没有文章内容，隐藏目录
+  if (!content || !tocList) {
+    if (tocPanel) tocPanel.style.display = 'none';
+    return;
+  }
+
+  // 获取所有h2、h3、h4标题（Markdown的##/###/####）
+  const headers = content.querySelectorAll('h2, h3, h4');
+  if (headers.length === 0) {
+    if (tocPanel) tocPanel.style.display = 'none';
+    return;
+  }
+
+  // 清空目录
+  tocList.innerHTML = '';
+
+  // 生成目录项
+  headers.forEach((header, index) => {
+    // 给标题加id（如果Hexo没自动生成的话）
+    if (!header.id) {
+      header.id = 'toc-' + index;
+    }
+
+    const li = document.createElement('li');
+    // 根据标题级别加类名，实现缩进
+    if (header.tagName === 'H3') {
+      li.classList.add('toc-level-3');
+    } else if (header.tagName === 'H4') {
+      li.classList.add('toc-level-4');
+    }
+
+    const a = document.createElement('a');
+    a.href = '#' + header.id;
+    a.textContent = header.textContent;
+    // 点击跳转（平滑滚动）
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  // 滚动监听，高亮当前目录项
+  const tocItems = tocList.querySelectorAll('li');
+  const headerList = Array.from(headers);
+
+  window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    let currentIndex = 0;
+
+    // 找到当前滚动位置对应的标题
+    for (let i = 0; i < headerList.length; i++) {
+      const headerTop = headerList[i].offsetTop - 100;
+      if (scrollTop >= headerTop) {
+        currentIndex = i;
+      }
+    }
+
+    // 高亮当前项
+    tocItems.forEach((item, index) => {
+      if (index === currentIndex) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  });
+});
+</script>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 🔥 仅文章详情页（layout=post）显示目录，隐藏其他模块 -->
+    
+        <div class="panel panel-gal" id="toc-panel">
+          <div class="panel-heading">
+            <i class="fa fa-list-ul"></i> 文章目录
+            <span class="panel-toggle" data-toggle="collapse" data-target="#toc-list">
+              <i class="fa fa-chevron-up"></i>
+            </span>
+          </div>
+          <ul class="list-group collapse in" id="toc-list">
+            <!-- JS会自动在这里生成目录项 -->
+          </ul>
+        </div>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 Dorange Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/SecurityBlog.github.io/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/SecurityBlog.github.io/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '14'
+    }
+    window.doroImg = '/SecurityBlog.github.io/imgs/doro.jpg'
+    window.doroLive2D = {
+      model: '/SecurityBlog.github.io/imgs/Dororong_Meme_Live2D_Model__By_0x4682B4_/Doro/Doro.model3.json',
+      js: [
+        '/SecurityBlog.github.io/js/live2d/live2dcubismcore.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi-live2d-display.min.js'
+      ]
+    }
+</script>
+
+<!-- 不蒜子: 访客数/浏览量统计, 数据经第三方服务器(busuanzi.ibruce.info) -->
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/SecurityBlog.github.io/js/hs.js"></script>
+<script src="/SecurityBlog.github.io/js/blog.js"></script>
+
+
+
+
+</html>
