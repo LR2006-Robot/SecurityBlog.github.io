@@ -150,9 +150,7 @@
     position: relative !important;
 }
     </style>
-<!-- hexo injector head_end start -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.2"></head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 
 <!-- 🔥 目录吸顶JS脚本（和你参考网站完全一致） -->
 <script>
@@ -273,11 +271,11 @@ $(window).scroll(function() {
                         </li>
                         
                         <li>
-                            <a href="/SecurityBlog.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/">密码学数学原理</a>
+                            <a href="/SecurityBlog.github.io/categories/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析</a>
                         </li>
                         
                         <li>
-                            <a href="/SecurityBlog.github.io/categories/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析</a>
+                            <a href="/SecurityBlog.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/">密码学数学原理</a>
                         </li>
                         
                         <li role="separator" class="divider"></li>
@@ -411,7 +409,7 @@ $(window).scroll(function() {
         <p>前面我们已经分析了经典的分组加密算法 DES 和 AES，这两个算法都是分组密码的代表。分组密码是对称加密算法中最重要的一类算法，但是我们经过前面学习会发现，分组密码算法本身只能对固定大小的块进行加密，而实际应用中我们需要加密的数据往往是任意长度的，这就引入了分组模式（Block Cipher Mode）的概念。</p>
 <p>分组模式是一种将分组密码算法扩展到任意长度数据的技术，它定义了如何将明文分成块、如何处理最后一个块以及如何将加密结果组合成最终的密文。常见的分组模式有 ECB（Electronic Codebook）、CBC（Cipher Block Chaining）、CFB（Cipher Feedback）、OFB（Output Feedback）和 CTR（Counter）等。</p>
 <p>在本章中，我们将深入分析这些分组模式的工作原理、优缺点以及它们在实际应用中的安全性表现，帮助读者全面理解分组模式的设计思想和使用场景。</p>
-<h2 id="明文填充-🫡">明文填充 🫡</h2>
+<h2 id="明文填充">明文填充</h2>
 <p>分组密码迭代加密要求每一个明文分组都是块长度(8或16字节)<br>
 当分组到最后一组时，其长度不足块长度，就需要对其进行填充，将长度扩展为块长度</p>
 <p>常见的填充方式有如下几种:</p>
@@ -423,28 +421,28 @@ $(window).scroll(function() {
 <li>PKCS7 填充:若需填充 N 个字节,则每个填充字节值都是 N<br>
 … | DD DD DD DD DD DD DD DD | DD DD DD 04 04 04 04 04 |</li>
 </ul>
-<h2 id="ECB（Electronic-Code-Book-mode-电子密码本模式）-🙂">ECB（Electronic Code Book mode 电子密码本模式） 🙂</h2>
+<h2 id="ECB（Electronic-Code-Book-mode-电子密码本模式）">ECB（Electronic Code Book mode 电子密码本模式）</h2>
 <p>ECB 是最简单的分组模式，它将明文分成固定大小的块，每个块独立加密，得到对应的密文块。</p>
 <p>由于每个块独立加密，因此相同的明文块会得到相同的密文块，这就导致了 ECB 模式的一个严重安全问题：它无法隐藏明文中的模式信息，容易受到重放攻击和统计分析攻击。<br>
 <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAER2UBpu9SwbtSKkRpQc6DghVMpUZa61AACqRwAAjDm2FVRT6KYzaNb6zoE.png" alt="ECB 模式示意图"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_ecb_encrypt</span>(<span class="params">pt, key</span>):</span><br><span class="line">    aes=AES.new(key, AES.MODE_ECB)</span><br><span class="line">    ct = aes.encrypt(pt)</span><br><span class="line">    <span class="keyword">return</span> ct</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_ecb_decrypt</span>(<span class="params">ct, key</span>):</span><br><span class="line">    aes=AES.new(key,AES.MODE_ECB)</span><br><span class="line">    pt=aes.decrypt(ct)</span><br><span class="line">    <span class="keyword">return</span> pt</span><br></pre></td></tr></table></figure>
-<h2 id="CBC（Cipher-Block-Chaining-mode-密码分组链接模式）-🥰">CBC（Cipher Block Chaining mode 密码分组链接模式） 🥰</h2>
+<h2 id="CBC（Cipher-Block-Chaining-mode-密码分组链接模式）">CBC（Cipher Block Chaining mode 密码分组链接模式）</h2>
 <p>CBC 模式通过将每个明文块与前一个密文块进行异或操作来加密当前块，从而解决了 ECB 模式的安全问题。</p>
 <p>CBC 模式需要一个初始化向量（IV）来加密第一个块，IV 应该是随机生成的并且在每次加密时都不同。然后上一块加密的结果会被用作下一块的输入异或。CBC 模式能够隐藏明文中的模式信息，但它也有一些缺点，比如加密和解密过程不能并行化，且对 IV 的管理要求较高。<br>
 <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAER2Ulpu9eGUL3lU3WXeI7Eq2vYnzFtAgACZRgAAjDm4FUNU2Z8xyXWEjoE.png" alt="CBC 模式示意图"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">aes_cbc_encrypt</span>(<span class="params">pt, key,iv</span>):</span><br><span class="line">    aes=AES.new(key,AES.MODE_CBC, iv=iv=iv=iv)</span><br><span class="line">    ct = aes.encrypt(pt)</span><br><span class="line">    <span class="keyword">return</span> ct</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_cbc_decrypt</span>(<span class="params">ct, key,iv</span>):</span><br><span class="line">    aes=AES.new(key,AES.MODE_CBC, iv=iv=iv=iv)</span><br><span class="line">    pt = aes.decrypt(ct)</span><br><span class="line">    <span class="keyword">return</span> pt</span><br></pre></td></tr></table></figure>
-<h2 id="CFB（Cipher-FeedBack-mode-密文反馈模式）-🤪">CFB（Cipher FeedBack mode 密文反馈模式） 🤪</h2>
+<h2 id="CFB（Cipher-FeedBack-mode-密文反馈模式）">CFB（Cipher FeedBack mode 密文反馈模式）</h2>
 <p>CFB 模式是先对 IV 进行加密得到中间结果，将这个结果与第一块明文进行异或得到第一块密文，然后将第一块密文进行加密得到中间结果，中间结果再与第二块明文异或，得到第二块密文，以此类推。<br>
 <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAER2U1pu9jkaEskIKF7jQ_s4fpjxENJhAACaRgAAjDm4FVcE3RdqdqWsjoE.png" alt="CFB 模式示意图"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">aes_cfb_encrypt</span>(<span class="params">pt, key,iv</span>):</span><br><span class="line">    aes=AES.new(key,AES.MODE_CFB, iv=iv=iv=iv)</span><br><span class="line">    ct = aes.encrypt(pt)</span><br><span class="line">    <span class="keyword">return</span> ct</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_cfb_decrypt</span>(<span class="params">ct, key,iv</span>):</span><br><span class="line">    aes=AES.new(key,AES.MODE_CFB, iv=iv=iv=iv)</span><br><span class="line">    pt = aes.decrypt(ct)</span><br><span class="line">    <span class="keyword">return</span> pt</span><br></pre></td></tr></table></figure>
-<h2 id="CTR（CounTeR-mode-计数器模式）-🤩">CTR（CounTeR mode 计数器模式） 🤩</h2>
+<h2 id="CTR（CounTeR-mode-计数器模式）">CTR（CounTeR mode 计数器模式）</h2>
 <p>CTR 模式是对一个逐次累加的计数器进行加密得到中间结果（类似密钥流的流密码），将这个结果与块明文进行异或得到块密文。CTR 每一次加密时，都会生成一个 nonce （仅用一次的数）来作为计数器的初始值，计数器格式为：前面字节为固定的 nonce，后面字节为分组序号，会逐次累加。<br>
 <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAER2VRpu9quRGUoCiI_T90ONnmjjBgI_gACcRgAAjDm4FW2XzjnINhGoToE.png" alt="计数器示意图"><br>
 <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAER2VVpu9tV56eNUSLqeV3wUtFJIKXZnQACchgAAjDm4FUEbK72OAyR2zoE.png" alt="CTR 模式示意图"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">aes_ctr_encrypt</span>(<span class="params">pt,key, nonce</span>):</span><br><span class="line">    aes = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">    ct = aes.encrypt(pt)</span><br><span class="line">    <span class="keyword">return</span> ct</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_ctr_decrypt</span>(<span class="params">ct, key, nonce</span>):</span><br><span class="line">    aes = AES.new(key, AES.MODE_CTR, nonce=nonce)</span><br><span class="line">    pt = aes.decrypt(ct)</span><br><span class="line">    <span class="keyword">return</span> pt</span><br></pre></td></tr></table></figure>
-<p>上一章：<a href="https://lr2006-robot.github.io/myblog.github.io/post/2013.html">加解密模式分析 - AES 加密算法</a> 👈<br>
-下一章：<a href="https://lr2006-robot.github.io/myblog.github.io/post/2015.html">加解密模式分析 - Shamir 门限秘密共享算法</a> 👈<br>
-回到开始：<a href="http://lr2006-robot.github.io/myblog.github.io/about/">关于我</a> 👈</p>
+<p>上一章：<a href="/SecurityBlog.github.io/2026/03/18/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20AES%20%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" title="加解密模式分析 - AES 加密算法">加解密模式分析 - AES 加密算法</a><br>
+下一章：<a href="/SecurityBlog.github.io/2026/03/19/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20Shamir%20%E9%97%A8%E9%99%90%E7%A7%98%E5%AF%86%E5%85%B1%E4%BA%AB%E7%AE%97%E6%B3%95/" title="加解密模式分析 - Shamir 门限秘密共享算法">加解密模式分析 - Shamir 门限秘密共享算法</a><br>
+回到开始：<a href="/SecurityBlog.github.io/about/">关于我</a></p>
 <p>相关链接：</p>
 
     </div>
