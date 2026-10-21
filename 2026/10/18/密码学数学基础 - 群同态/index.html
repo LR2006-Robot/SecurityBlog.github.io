@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Dorange">
+    
+    <meta name="description" content="work all day, and then I wake up...">
+    
+    
+    
+    
+    
+    
+    <title>密码学数学基础 - 群同态 | Fiex Reed</title>
+    <link href="https://lr2006-robot.github.io/SecurityBlog.github.io" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/bootstrap.min.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/aos.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/style.css">
+
+    
+<script src="/SecurityBlog.github.io/js/jquery.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/bootstrap.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/aos.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/SecurityBlog.github.io/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/SecurityBlog.github.io/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="/SecurityBlog.github.io/favicon.ico">
+    <link rel="shortcut icon" href="/SecurityBlog.github.io/favicon.ico" type="image/x-icon">
+    <style>
+/* 文章主容器 */
+#article .article-body,
+#article-list .article-body {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+}
+
+/* 侧边栏/卡片也一起加深，不然还是淡 */
+.panel,
+.panel2,
+.panel-gal,
+.list-group-item,
+.breadcrumb,
+.breadcrumb-gal {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+}
+
+/* 文章内容区单独加白背景，文字更清晰 */
+.content-article {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+}
+
+/* 加深文字颜色，对比度拉满 */
+.content-article p,
+.content-article h1,
+.content-article h2,
+.content-article h3,
+.content-article li {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+}
+
+/* 目录基础样式 */
+#toc-panel {
+    width: 100%;
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    box-shadow: 0 0 8px #000 !important;
+    margin-bottom: 30px !important;
+    z-index: 999 !important;
+}
+#toc-panel.fixed {
+    position: fixed !important;
+    top: 80px !important;
+    width: 350px !important;
+}
+#toc-panel .panel-heading {
+    color: #fff !important;
+    background-color: rgba(10,10,0,.7) !important;
+    border-color: #000 !important;
+}
+#toc-list {
+    max-height: calc(100vh - 180px) !important;
+    overflow-y: auto !important;
+}
+#toc-list li {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease !important;
+}
+#toc-list li a {
+    color: #3d4450 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+#toc-list li.toc-level-3 {
+    padding-left: 30px !important;
+}
+#toc-list li.active {
+    background-color: rgba(107, 105, 214, 0.2) !important;
+}
+#toc-list li.active a {
+    color: #6b69d6 !important;
+    font-weight: bold !important;
+}
+
+/* 修复侧边栏宽度 */
+#sidebar {
+    position: relative !important;
+}
+    </style>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<!-- 🔥 目录吸顶JS脚本（和你参考网站完全一致） -->
+<script>
+$(window).scroll(function() {
+    var toc = $("#toc-panel");
+    var sidebar = $("#sidebar");
+    var scrollTop = $(window).scrollTop();
+    var offsetTop = sidebar.offset().top;
+
+    if (scrollTop > offsetTop - 80) {
+        toc.addClass("fixed");
+    } else {
+        toc.removeClass("fixed");
+    }
+});
+</script>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">
+                
+                <!-- 这里background使用imgs/${logo_image}(路径文件名) -->
+                <style>
+                    /* 一群猫躲在导航栏底边线后面, 平时只露耳朵;
+                       鼠标移上来就依次爬上来, 爪子落在底边线上 */
+                    #gal-header .navbar-brand {
+                        position: relative;
+                        display: block;
+                        width: 240px;
+                        height: 54px;   /* 和导航栏等高, 它的底边就是猫抓的那条"边框" */
+                        overflow: hidden;
+                        background: none;
+                    }
+
+                    #gal-header .navbar-brand .cat {
+                        position: absolute;
+                        bottom: 0;
+                        left: calc(6px + var(--i) * 40px);   /* 40px 间距, 54px 宽 -> 互相压一点, 更像一群 */
+                        width: 54px;
+                        height: 54px;
+                        background: url('/SecurityBlog.github.io/imgs/logo.png') no-repeat center / contain;
+                        /* 静止: 往下推 43px, 露出的 11px 刚好是耳朵(图里耳朵占顶部 6%~15%) */
+                        translate: 0 43px;
+                        transition: translate 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    }
+
+                    /* 延迟只写在 hover 上: 上来时一只只错开, 缩回去时一起走 */
+                    #gal-header .navbar-brand:hover .cat {
+                        translate: 0 0;
+                        transition-delay: calc(var(--i) * 60ms);
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        #gal-header .navbar-brand .cat {
+                            transition: none;
+                        }
+                        #gal-header .navbar-brand:hover .cat {
+                            transition-delay: 0s;
+                        }
+                    }
+                </style>
+                    
+                <div class="navbar-brand"><span class="cat" style="--i: 0"></span><span class="cat" style="--i: 1"></span><span class="cat" style="--i: 2"></span><span class="cat" style="--i: 3"></span><span class="cat" style="--i: 4"></span></div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98/">RSA加解密专题</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/">密码学数学原理</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories">全部分类</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/RSA/">RSA</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%89%8D%E8%A8%80/">前言</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags">全部标签</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/about">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">Fiex Reed</a>
+        >
+        <span>密码学数学基础 - 群同态</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/SecurityBlog.github.io/2026/10/18/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E7%BE%A4%E5%90%8C%E6%80%81/">密码学数学基础 - 群同态</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%95%B0%E5%AD%A6/">数学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/">抽象代数</a>
+                
+            </span>
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2026-10-18
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/SecurityBlog.github.io/2026/10/18/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E7%BE%A4%E5%90%8C%E6%80%81/">密码学数学基础 - 群同态</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2026-10-18
+            </p>
+            <p>
+                
+                <i class="fa fa-tags"></i>
+                
+                <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%95%B0%E5%AD%A6/">数学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/">抽象代数</a>
+                
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p>前面我们讲了这么多，都还只是群的一些概念性的东西，所涉及的也都只是单个群可能引申出来的子群，陪集，正规子群，商群等等，接下来我们将进一步深入学习群论。后面我们的涉及范围不仅仅局限于单个群，我们将研究群与群之前的关系以及可以进行的一些操作，可以说接下来的才是真正的群论的核心内容。</p>
+<h2 id="群同态"><a href="#群同态" class="headerlink" title="群同态"></a>群同态</h2><p>群同态（group homomorphism）本质上就是定义在群和群之间的映射或者说函数，它有点类似于在两个群之间建立了一条穿越通道，可以将一个群的元素映射成另一个群的元素。当然，并不是所有的映射都是有研究价值的，我们研究的是有特殊功能的映射。</p>
+<p>群同态的特殊功能是这样的，设 $f$ 是定义在群 $G$ 和 $G’$ 上的映射或者说函数群 $G$ 的元素 $a$ 经过它穿越到群 $G’$ 以后，元素的模样会发生变化，变成 $f(a)$ 了，但是元素之间的运算关系仍可以得到保持。</p>
+<p><img src="https://img.remit.ee/i/0l9sYOxmH298" alt="0l9sYOxmH298.png"></p>
+<p>这个运算的关系的保持，可以这样理解。设 $a$ 和 $b$ 的任意元素，这两个元素进行群内运算后，其结果经过 $f$ 映射就对应 $G’$ 中的一个元素。另外，我们把 $a$ 和 $b$ 分别用 $f$ 映射，得到 $G’$ 里的两个元素 $f(a)$ 和 $f(b)$，这两个元素用 $G’$ 的二元运算进行运算，就得到群里面的另一个元素。如果得到的两个元素相等，$f$ 就叫做 $G$ 到 $G’$ 的群同态。</p>
+<p><img src="https://img.remit.ee/i/snXjQp9BOiM4" alt="snXjQp9BOiM4.png"></p>
+<p>可见，元素映射以后，彼此之间的运算规律得到保持，这里我们给出严谨的数学定义：设群 $(G,<em>)$ 和群 $(G’,\otimes)$，如果函数 $f:G \rightarrow G’$ 对于 $\forall a, b \in G$，都有 $f(a</em>b) &#x3D; f(a) \otimes f(b)$，则称 $f$ 为 $(G,*)$ 到 $(G’,\otimes)$ 的群同态。</p>
+<p>群同态这个东西非常有价值，实际上，群和群之间有很大的差别，有的群很容易分析，有的群就很神秘，我们可以借助群同态，用一个群的知识去分析另一个群，从而揭开这个群的神秘面纱。同时，群之间的同态映射可能会有很多个，而不一定是唯一的。</p>
+<p>同时我们要考虑到一种情况，有可能元素经过映射后的落点可能只是 $G’$ 的子集，也就是说 $G’$ 的某些元素在 $G$ 中可能找不到原像，因此，我们引入 $f$ 的同态像（homomorphic image）这个重要的集合，简称像，用符号 $Im f$ 表示。像就是 $G’$ 中能找到原像的那些元素构成的子集。同态像：$Imf :&#x3D; f(G) :&#x3D; {f(a)|a \in G}$</p>
+<p><img src="https://img.remit.ee/i/KOFknjRGu5PP" alt="KOFknjRGu5PP.png"></p>
+<p>这里我们再引入一个概念，同态核（homomorphic kernel），表示 $G$ 里经过 $f$ 映射后等于 $G’$ 单位元的那些元素就是核里面的元素，我们记作 $Ker f$。同态核：$Kerf :&#x3D; {a \in G|f(a) &#x3D; e’}$（$e’$ 表示 $G$ 的单位元）</p>
+<p><img src="https://img.remit.ee/i/wvJiVRW4D1zt" alt="wvJiVRW4D1zt.png"></p>
+<p>那么我们怎么判断是不是群同态呢？只要判断是否满足同态的这个式子就可以了，下面就介绍几个群同态的经典例子，顺便介绍几个小概念。</p>
+<ol>
+<li>嵌入映射（inclusion map）：子群和群之间可以定义一个群同态。子群 $H$ 里的元素可以直接映射到它自身，这个很显然是符号群同态的式子的。证明：$\forall a, b \in H, f(a<em>b) &#x3D; a</em>b &#x3D;f(a)*f(b)$。这个群同态还有一个特点，就是原像和像之间是一对一的，所以这是一个单射，这种群同态叫做单一同态。</li>
+<li>自然映射（natural map）：$N$ 是 $G$ 的正规子群，$G$ 的每个元素可以用 $N$ 进行分类，并进入相应的陪集。如果我们把这个分类的过长看作一个函数，每个元素通过这个函数会映射进相应的陪集，这个函数实际上也是个群同态，定义域是 $G$，值域是相应的商群。证明：$\forall a, b \in G, f(a<em>b) &#x3D;[a</em>b]_N &#x3D;[a]_N*[b]_N&#x3D;f(a)*f(b)$。这个陪集还有一个特点，每个陪集总有与之对应的原像，就是它的那些代表元，所以这是个满射，这种群同态叫做满同态。</li>
+</ol>
+<p>正规子群 $N$ 本身也是商群的一个元素，叫做平凡陪集。虽然它不是商群关注的重点，但是起着非常重要的作用，它不仅包含着群的单位元，同时也是商群的单位元。既然 $N$ 是商群的单位元，那么被分类到 $N$ 的元素就必然是同态核里面的元素，有意思的是只有 $N$ 里的元素会被分配到 $N$。所以，自然映射的同态核就是正规子群 $N$。</p>
+<ol start="3">
+<li>$m$ 次方映射（m-power map）：设 $m$ 是个整数，阿贝尔群 $G$ 自身之间可以定义一个群同态，把群里的元素 $a$ 映射成 $a^m$。证明：$\forall a, b \in H, f(a<em>b) &#x3D; (a</em>b)^m &#x3D; a^m *b^m&#x3D;f(a)*f(b)$。显然，同态像 $Imf &#x3D;G^m$，同态核 $Kerf &#x3D;G{m}$。</li>
+<li>雅可比映射（Jacobi map）：$Z^<em>_n$ 是模正整数 $n$ 下的乘法群，而 $\pm 1$ 是个普通的乘法群，雅可比映射就是二者之间的群同态，另外值域的单位元就是 1。核里的元素就是那些雅可比符号等于 1 的元素。证明：$\forall z,b \in Z^</em>_n, J_n(ab) &#x3D; (\frac{ab}{n}) &#x3D; (\frac{a}{n})(\frac{b}{n}) &#x3D; J_n(a)J_n(b)$。</li>
+</ol>
+<h2 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h2><p>我们现在正式开始研究群的元素完成映射后，原本在群中的关系会产生什么样的变化。例如群的单位元映射后还是单位元吗，群中互为逆元的两个元素映射后还是逆元吗，以及群中的子群所有元素穿越后还构成子群吗？可以现在这里回答，上面的三个问题都是肯定的，后面我们进行一一讲解。</p>
+<p>先看第一个性质：$f(e) &#x3D; e’$（$e$ 和 $e’$ 分别是群 $G$ 和 $G’$ 的单位元）。证明：$f(e) \otimes e’ &#x3D; f(e) &#x3D; f(e*e) &#x3D; f(e) \otimes f(e)$，两边同时消去一个 $f(e)$ 得到 $e’ &#x3D; f(e)$ 得证。</p>
+<p>第二个性质：$f(a^{-1}) &#x3D; f(a)^{-1}, \forall a \in G$。证明：$f(a^{-1}) \otimes f(a) &#x3D; f(a^{-1}*a) &#x3D; f(e) &#x3D; e’$，如此即可得到 $f(a^{-1}) &#x3D; f(a)^{-1}$ 得证。</p>
+<p>第三个性质：$H$ 是群 $G$ 的子群 $\rightarrow$ $f(H)$ 是 $G’$ 的子群。证明：$\forall a, b \in H, f(a),f(b) \in f(H)$，则 $f(a) \otimes f(b)^{-1} &#x3D; f(a) \otimes f(b^{-1}) &#x3D; f(a*b^{-1}) \in f(H)$。这个性质我们可以稍微扩展一下，如果 $H$ 这个子群是平凡子群的话，那是不是就代表着映射过去的得到子群就是整个群映射的结果，那不就是同态像的定义么，所以 $H :&#x3D; G \rightarrow f(G) &#x3D; Imf$。同时我们也可以得到同态像 $Imf$ 是 $G’$ 的子群。</p>
+<p>那么前面的性质三反过来实际上也是成立的，也就是第四个性质，首先我们用 $f^{-1}$ 来表示元素的原像：$H’$ 是 $G’$ 的子群 $\rightarrow$ $f^{-1}(H’)$ 是 $G$ 的子群。证明和前面反过来类似：$f^{-1}(H’)$ 非空，因为 $f(e) &#x3D; e’ \in H’$，则 $e \in f^{-1}(H’)$。$\forall a, b \in f^{-1}(H’),f(a<em>b^{-1}) &#x3D; f(a) \otimes f(b)^{-1} \in H’$，得到 $a</em>b^{-1} \in f^{-1}(H’)$。同理这个性质也可以进行扩展，如果这个子群是一个平凡子群，只包含单位元 $e’$ 的话，原像集合就是同态核，所以： $H’ :&#x3D; {e’} \rightarrow f^{-1}(H’) &#x3D; f^{-1}({e’}) &#x3D;Kerf$，也就是同态核 $Kerf$ 是 $G$ 的子群。</p>
+<p>总结一下重要结论：</p>
+<ul>
+<li>同态像 $Imf$ 是群 $G’$ 的子群</li>
+<li>同态核 $Kerf$ 是群 $G$ 的子群</li>
+</ul>
+<p>第五个性质：$f(a^m) &#x3D; f(a)^m, \forall a \in G,\forall m \in Z$，证明：$f(a^m) &#x3D; f(a*\cdots*a) &#x3D; f(a) \otimes \cdots \otimes f(a) &#x3D; f(a)^m$。</p>
+<p>类似于做梦，进入第一重梦境后还可以进入第二重，甚至第三重梦境。同样的，映射之后也可以继续映射，这就涉及到群同态的复合这个概念了。这也是一种新的群同态，定理：$f$ 是 $(G,<em>)$ 到 $(G’,\otimes)$ 的群同态，$f’$ 是 $(G’,\otimes)$ 到 $(G’’,\boxplus)$ 的群同态，则 $f$ 和 $f’$ 的复合 $f’ \circ f:G \rightarrow G’’$ 也是群同态。证明也是很简单，就是运用两次群同态的公式：$\forall a, b \in G$，有 $f’(f(a</em>b)) &#x3D; f’(f(a) \otimes f(b)) &#x3D; f’(f(a)) \boxplus f’(f(b))$，所以 $f’ \circ f(a*b) &#x3D; f’ \circ f(a) \boxplus f’ \circ f(b)$。</p>
+<p><img src="https://img.remit.ee/i/vjEDAAZsT359" alt="vjEDAAZsT359.png"></p>
+<h2 id="同态核的映射"><a href="#同态核的映射" class="headerlink" title="同态核的映射"></a>同态核的映射</h2><p>前面我们讲到，单位元经过映射还是单位元，但是不只是单位元映射结果是单位元，映射后为单位元的集合叫做同态核，我们就来介绍一下同态核里面的这些元素有什么特点。之前我们就证明了核是群 $G$ 的子群，但是它可不止是一个子群这么简单，还是一个正规子群。也就是定理：$f:G \rightarrow G’$ 是群同态，则 $Kerf$ 是正规子群。</p>
+<p>那么我们要证明：$\forall a \in G$，有 $a Kerf &#x3D; {a<em>h | h \in Kerf}$，$\exists h’ \in Kerf$，有 $a</em>h &#x3D; h’ <em>a$。推导一下证明：$a</em>h &#x3D; h’ <em>a \rightarrow a</em>h<em>a^{-1} &#x3D;h’ \in Kerf \rightarrow f(a</em>h<em>a^{-1})&#x3D;e’$。化到这里就是直接套用定义即可证明：$f(a</em>h<em>a^{-1}) &#x3D;f(a)\otimes f(h) \otimes f(a^{-1}) &#x3D; f(a)\otimes e’ \otimes f(a^{-1}) &#x3D; e’$。所以 $a Kerf &#x3D; {a</em>h | h \in Kerf} &#x3D; Kerf a$。</p>
+<p>同态核的一种重要作用，就是用来判断群同态是否是单一同态。这就涉及到两个定理了，先看第一个定理：$f:G \rightarrow G’$ 是群同态，$\forall a, b \in G$，有 $f(a) &#x3D; f(b) \leftrightarrow a \equiv b \mod Kerf$。证明：$f(a)&#x3D;f(b) \leftrightarrow f(b)^{-1} \otimes f(a) &#x3D; f(b)^{-1} \otimes f(b) &#x3D; e’ \leftrightarrow f(b^{-1}*a) &#x3D; e’ \leftrightarrow b^{-1} * a \in Kerf \leftrightarrow a \equiv b \mod Kerf$。</p>
+<p>第二个定理：$f:G \rightarrow G’$ 是群同态，有 $f$ 是单射 $\rightarrow$ $Kerf &#x3D; {e}$。正向证明：$f$ 是单射，则 $e’$ 的原像只有一个元素，所以 $Kerf &#x3D; {e}$。反向证明：假设 $f$ 不是单射，$\exists a, b \in G, a \neq b$，有 $f(a) &#x3D; f(b)$。由前面的定理，$a \equiv b \mod Kerf$，则 $b^{-1} * a \in Kerf$。但是由于 $ a \neq b $，所以 $b^{-1} * a \neq e$，与 $Kerf &#x3D; {e}$ 矛盾。</p>
+<p>总结一下重要结论：</p>
+<ul>
+<li>$f$ 是单一同态 $\leftrightarrow$ $Kerf &#x3D; {e}$</li>
+<li>$f$ 是满同态 $\leftrightarrow$ $Imf &#x3D; G’$</li>
+</ul>
+<h2 id="群同构"><a href="#群同构" class="headerlink" title="群同构"></a>群同构</h2><p>一个函数如果既是单射，又是满射，它就是一个双射，一个群同态是个双射函数，它就叫做群同构（group isomorphism）。也就是说群同构就是一种特殊的群同态，既是双射，又满足群同态的性质。</p>
+<p>如果 $G$ 到 $G’$ 存在一个群同构，就称 $G$ 同构于 $G’$，既然群同构是个双射，它的逆映射必然是双射，也是群同构，所以 $G’$ 也同构于 $G$。因此，我们常说 $G$ 和 $G’$ 是同构的，记作 $G \cong G’$。$G$ 和 $G$ 之间的同构叫做自同构（group autoisomorphism）。</p>
+<p>群同构这个概念表示什么意义呢？就是说两个群表面上看起来长得不一样，但是它们的元素之间是意义对应的，而且运算规律也得到保持，即使经过了映射，群的所有结构特性也都保留了下来。两个同构的群，本质上是同一个群。所以，如果一堆群彼此之间是同构的，那么研究其中一个群的性质就可以了，因为其他的那些也必然具有完全相同的性质。</p>
+<p>接下来是核心内容，第一同构定理（first isomorphism theorem），又称基本同态定理（FHT，fundamental homomorphism theorem）。它是一种利用群同态来构造群同构的方法。既然同态核是 $G$ 的正规子群，那就可以用来构造商群，商群和同态像之间就村啊在群同构，记作 $\rho$。这个群同构就是把商群的陪集映射成代表元的像。</p>
+<p>定理：设群 $(G,*)$ 和群 $(G’,\otimes)$，$f:G \rightarrow G’$ 是群同态（同态核是 $Kerf$，同态像是 $Imf$），则 $G&#x2F;Kerf \cong Imf$。可以记作 $\rho : [a]_{Kerf} \leftrightarrow f(a)$。</p>
+<p><img src="https://img.remit.ee/i/8Z1SeTVK2Azp" alt="8Z1SeTVK2Azp.png"></p>
+<p>这个定理的实质是这样的，回忆一下之前的内容。核是所有被 $f$ 打到单位元的 $G$ 中元素构成的正规子群，对于一个陪集 $[a]_{Kerf}&#x3D;a\cdot Kerf&#x3D;{ah\mid h\in Kerf}$ 里面的元素 $ah$，在映射 $f$ 下，全部映射到同一个值 $f(a)$，$f(ah)&#x3D;f(a)f(h)&#x3D;f(a)\cdot e’&#x3D;f(a)$。同一个陪集里的所有 $G$ 中元素，经过 $f$ 之后，得到 $G’$ 里同一个像。也就是说，一个陪集，对应唯一的一个像。当然，我们还是要证明它是个双射，还是个群同态证明：</p>
+<ul>
+<li>$\forall a, b \in G$，则 $[a]<em>{kerf} &#x3D; [b]</em>{Kerf} \leftrightarrow a \equiv b \mod Kerf \leftrightarrow f(a) &#x3D; f(b)$，所以 $\rho$ 是个单射。</li>
+<li>$\forall f(a) \in Imf$，都有对应的原像 $[a]_{Kerf}$，所以 $\rho$ 是个满射。</li>
+<li>$\forall a, b \in G$，则 $\rho([a]<em>{kerf} * [b]</em>{Kerf}) &#x3D; \rho([a<em>b]_{Kerf}) &#x3D; f(a</em>b) &#x3D; f(a) \otimes f(b) &#x3D; \rho([a]<em>{Kerf}) \otimes \rho([b]</em>{Kerf})$，所以 $\rho$ 是个群同态。</li>
+</ul>
+<p>这个定理我们也可以转化一下，我们知道同态像是群 $G’$ 的子群，所以我们推导 $\rho’ :G&#x2F;kerf \rightarrow G’ $ 是单一同态。这个我们后面会用到。</p>
+<p>举个例子，我们可以用现在学到的群论只是分析中国剩余定理与中国剩余映射，符号还是和前面的学习一样。$n_1$， $n_2$ 什么的是彼此互素的正整数，它们的乘积记作 $n$。这些小模数可以构造一系列加法群，这些加法群里面的元素都是剩余类。所以我们来看这个映射 $f_i : Z \rightarrow Z_{n_i}$，定义域是整数群 $Z$，值域就是第 $i$ 个加法群，它是把 $Z$ 里的整数 $a$，映射成以 $n_i$ 为模数，以 $a$ 为代表元的剩余类。这个其实就是个群同态，证明：$\forall a, b \in Z, f_i(a+b) &#x3D; [a+b]<em>{n_i} &#x3D; [a]</em>{n_i} + [b]_{n_i} &#x3D; f_i(a)+f_i(b)$。</p>
+<p>这样我们就有了 $m$ 个群同态，现在把这些值域做笛卡尔乘积。映射 $f: Z \rightarrow Z_{n_1} \times \cdots \times Z_{n_m}$，它是把 $Z$ 里的整数 $a$ 映射成笛卡尔乘积里的一个元素，这个元素是个向量，每个分量都是以相应的 $n_i$ 为模数，以 $a$ 为代表元的剩余类 $f(a) &#x3D; ([a]<em>{n_1},\cdots,[a]</em>{n_m})$。前面我们知道 $f_1$ 到 $f_m$ 都是群同态，那这个也是群同态。证明：$\forall a, b \in Z, f(a+b)&#x3D;([a+b]<em>{n_1}, \cdots, [a+b]</em>{n_m}) &#x3D; ([a]<em>{n_1}+[b]</em>{n_1},\cdots,[a]<em>{n_m}+[b]</em>{n_m})&#x3D;([a]<em>{n_1}, \cdots, [a]</em>{n_m})+([b]<em>{n_1},\cdots,[b]</em>{n_m})&#x3D;f(a)+f(b)$。</p>
+<p>下面我们要基于第一同构定理弄一个群同构，首先要先搓一个同态核。同态核是这样的，对于某个小模数 $n_i$，如果 $a$ 是它的倍数 $a \equiv 0 \mod n_i$，剩余类 $[a]<em>{n_i}$ 就等于剩余类 $[0]</em>{n_i}$，即 $n_i | a \leftrightarrow [a]<em>{n_i} &#x3D; [0]</em>{n_i}$。所以，如果 $a$ 是所有小模数的倍数的话，就有式子 $n_1 |a, \cdots,n_m | a \leftrightarrow ([a]<em>{n_1},\cdots,[a]</em>{n_m}) &#x3D; ([0]<em>{n_1},\cdots,[0]</em>{n_m})$ 成立，而这堆 0 形成的向量，其实就是笛卡尔乘积的单位元，所以此时 $a \in Kerf$，反之亦然。而且由于 $a$ 是所有小模数的倍数，那么 $a$ 一定是它们的乘积 $n$ 的倍数，所以 $a \in Z$，因为 $n$ 的倍数都在 $nZ$ 里。这就说明，凡是同态核里的元素都是 $nZ$ 的元素，反之亦然。因此 $nZ$ 就是同态核。</p>
+<p>现在我们使用整数群和同态核构造商群，这个商群就是 $Z_n$。根据第一同构定理，我们可以把构造一个群同态，就是把商群 $Z_n$ 里的元素映射成 $f(a)$，而 $f(a)$ 就是笛卡尔乘积里面的向量。$\rho: Z_n \rightarrow Z_{n_1} \times \cdots \times Z_{n_m}$ 这个群同态是个单一同态。注意，这个 $Z_n$ 和这个笛卡尔乘积的元素是一样的，这种情况下，单射就意味着满射，所以实际上这就是一个群同构。</p>
+<p>上一章：<a href="/SecurityBlog.github.io/2026/02/27/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E7%BE%A4/" title="密码学数学基础 - 群基础">密码学数学基础 - 群</a><br>下一章：<a href="/SecurityBlog.github.io/2026/10/20/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E5%BE%AA%E7%8E%AF%E7%BE%A4%E4%B8%8E%E5%8E%9F%E6%A0%B9/" title="密码学数学基础 - 循环群与原根">密码学数学基础 - 循环群与原根</a><br>回到开始：<a href="/SecurityBlog.github.io/about/">关于我</a></p>
+
+    </div>
+</article>
+
+
+<script>
+// 等页面加载完成后执行
+window.addEventListener('load', function() {
+  const content = document.querySelector('.content-article');
+  const tocList = document.getElementById('toc-list');
+  const tocPanel = document.getElementById('toc-panel');
+  
+  // 如果没有文章内容，隐藏目录
+  if (!content || !tocList) {
+    if (tocPanel) tocPanel.style.display = 'none';
+    return;
+  }
+
+  // 获取所有h2、h3、h4标题（Markdown的##/###/####）
+  const headers = content.querySelectorAll('h2, h3, h4');
+  if (headers.length === 0) {
+    if (tocPanel) tocPanel.style.display = 'none';
+    return;
+  }
+
+  // 清空目录
+  tocList.innerHTML = '';
+
+  // 生成目录项
+  headers.forEach((header, index) => {
+    // 给标题加id（如果Hexo没自动生成的话）
+    if (!header.id) {
+      header.id = 'toc-' + index;
+    }
+
+    const li = document.createElement('li');
+    // 根据标题级别加类名，实现缩进
+    if (header.tagName === 'H3') {
+      li.classList.add('toc-level-3');
+    } else if (header.tagName === 'H4') {
+      li.classList.add('toc-level-4');
+    }
+
+    const a = document.createElement('a');
+    a.href = '#' + header.id;
+    a.textContent = header.textContent;
+    // 点击跳转（平滑滚动）
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  // 滚动监听，高亮当前目录项
+  const tocItems = tocList.querySelectorAll('li');
+  const headerList = Array.from(headers);
+
+  window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    let currentIndex = 0;
+
+    // 找到当前滚动位置对应的标题
+    for (let i = 0; i < headerList.length; i++) {
+      const headerTop = headerList[i].offsetTop - 100;
+      if (scrollTop >= headerTop) {
+        currentIndex = i;
+      }
+    }
+
+    // 高亮当前项
+    tocItems.forEach((item, index) => {
+      if (index === currentIndex) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  });
+});
+</script>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 🔥 仅文章详情页（layout=post）显示目录，隐藏其他模块 -->
+    
+        <div class="panel panel-gal" id="toc-panel">
+          <div class="panel-heading">
+            <i class="fa fa-list-ul"></i> 文章目录
+            <span class="panel-toggle" data-toggle="collapse" data-target="#toc-list">
+              <i class="fa fa-chevron-up"></i>
+            </span>
+          </div>
+          <ul class="list-group collapse in" id="toc-list">
+            <!-- JS会自动在这里生成目录项 -->
+          </ul>
+        </div>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 Dorange Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/SecurityBlog.github.io/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/SecurityBlog.github.io/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '14'
+    }
+    window.doroImg = '/SecurityBlog.github.io/imgs/doro.jpg'
+    window.doroLive2D = {
+      model: '/SecurityBlog.github.io/imgs/Dororong_Meme_Live2D_Model__By_0x4682B4_/Doro/Doro.model3.json',
+      js: [
+        '/SecurityBlog.github.io/js/live2d/live2dcubismcore.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi-live2d-display.min.js'
+      ]
+    }
+</script>
+
+<!-- 不蒜子: 访客数/浏览量统计, 数据经第三方服务器(busuanzi.ibruce.info) -->
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/SecurityBlog.github.io/js/hs.js"></script>
+<script src="/SecurityBlog.github.io/js/blog.js"></script>
+
+
+
+
+</html>

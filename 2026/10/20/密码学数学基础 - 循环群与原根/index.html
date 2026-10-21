@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Dorange">
+    
+    <meta name="description" content="work all day, and then I wake up...">
+    
+    
+    
+    
+    
+    
+    <title>密码学数学基础 - 循环群与原根 | Fiex Reed</title>
+    <link href="https://lr2006-robot.github.io/SecurityBlog.github.io" rel="prefetch" />
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/bootstrap.min.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/aos.css">
+<link rel="stylesheet" href="/SecurityBlog.github.io/css/style.css">
+
+    
+<script src="/SecurityBlog.github.io/js/jquery.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/bootstrap.min.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/aos.js"></script>
+
+    
+<script src="/SecurityBlog.github.io/js/highslide/highslide-full.min.js"></script>
+
+    
+<link rel="stylesheet" href="/SecurityBlog.github.io/js/highslide/highslide.css">
+
+    <style type="text/css">
+        @media (max-width: 768px) {
+            body {
+                background-color: #f0f0f0;
+                background: url('/imgs/xsbg.gif');
+                background-attachment: fixed;
+            }
+        }
+    </style>
+    
+    <!--<script type="text/javascript">
+      if (document.images) {
+        var avatar = new Image();
+        avatar.src = '/SecurityBlog.github.io/imgs/avatar.jpg'
+        var previews = 'preview1.jpg,preview2.jpg,preview3.jpg,preview4.jpg'.split(',')
+        var previewsPreLoad = []
+        for(var i = 0; i < length; i++) {
+          previewsPreLoad.push(new Image())
+          previewsPreLoad[previewsPreLoad.length - 1].src = '/SecurityBlog.github.io/imgs/preview' + previews[i]
+        }
+      }
+    </script>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="/SecurityBlog.github.io/favicon.ico">
+    <link rel="shortcut icon" href="/SecurityBlog.github.io/favicon.ico" type="image/x-icon">
+    <style>
+/* 文章主容器 */
+#article .article-body,
+#article-list .article-body {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) !important;
+}
+
+/* 侧边栏/卡片也一起加深，不然还是淡 */
+.panel,
+.panel2,
+.panel-gal,
+.list-group-item,
+.breadcrumb,
+.breadcrumb-gal {
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    opacity: 1 !important;
+}
+
+/* 文章内容区单独加白背景，文字更清晰 */
+.content-article {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+}
+
+/* 加深文字颜色，对比度拉满 */
+.content-article p,
+.content-article h1,
+.content-article h2,
+.content-article h3,
+.content-article li {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+}
+
+/* 目录基础样式 */
+#toc-panel {
+    width: 100%;
+    background-color: rgba(230, 238, 232, 0.65) !important;
+    box-shadow: 0 0 8px #000 !important;
+    margin-bottom: 30px !important;
+    z-index: 999 !important;
+}
+#toc-panel.fixed {
+    position: fixed !important;
+    top: 80px !important;
+    width: 350px !important;
+}
+#toc-panel .panel-heading {
+    color: #fff !important;
+    background-color: rgba(10,10,0,.7) !important;
+    border-color: #000 !important;
+}
+#toc-list {
+    max-height: calc(100vh - 180px) !important;
+    overflow-y: auto !important;
+}
+#toc-list li {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease !important;
+}
+#toc-list li a {
+    color: #3d4450 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+#toc-list li.toc-level-3 {
+    padding-left: 30px !important;
+}
+#toc-list li.active {
+    background-color: rgba(107, 105, 214, 0.2) !important;
+}
+#toc-list li.active a {
+    color: #6b69d6 !important;
+    font-weight: bold !important;
+}
+
+/* 修复侧边栏宽度 */
+#sidebar {
+    position: relative !important;
+}
+    </style>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<!-- 🔥 目录吸顶JS脚本（和你参考网站完全一致） -->
+<script>
+$(window).scroll(function() {
+    var toc = $("#toc-panel");
+    var sidebar = $("#sidebar");
+    var scrollTop = $(window).scrollTop();
+    var offsetTop = sidebar.offset().top;
+
+    if (scrollTop > offsetTop - 80) {
+        toc.addClass("fixed");
+    } else {
+        toc.removeClass("fixed");
+    }
+});
+</script>
+<body>
+    <!-- 背景轮播图功能 -->
+    <section class="hidden-xs">
+    <ul class="cb-slideshow">
+        <li><span>天若</span></li>
+        <li><span>有情</span></li>
+        <li><span>天亦老</span></li>
+        <li><span>我为</span></li>
+        <li><span>长者</span></li>
+        <li><span>续一秒</span></li>
+    </ul>
+</section>
+    <!-- 欧尼酱功能, 谁用谁知道 -->
+    
+    <header class="navbar navbar-inverse" id="gal-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".bs-navbar-collapse"
+                    aria-expanded="false">
+                <span class="fa fa-lg fa-reorder"></span>
+            </button>
+            <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">
+                
+                <!-- 这里background使用imgs/${logo_image}(路径文件名) -->
+                <style>
+                    /* 一群猫躲在导航栏底边线后面, 平时只露耳朵;
+                       鼠标移上来就依次爬上来, 爪子落在底边线上 */
+                    #gal-header .navbar-brand {
+                        position: relative;
+                        display: block;
+                        width: 240px;
+                        height: 54px;   /* 和导航栏等高, 它的底边就是猫抓的那条"边框" */
+                        overflow: hidden;
+                        background: none;
+                    }
+
+                    #gal-header .navbar-brand .cat {
+                        position: absolute;
+                        bottom: 0;
+                        left: calc(6px + var(--i) * 40px);   /* 40px 间距, 54px 宽 -> 互相压一点, 更像一群 */
+                        width: 54px;
+                        height: 54px;
+                        background: url('/SecurityBlog.github.io/imgs/logo.png') no-repeat center / contain;
+                        /* 静止: 往下推 43px, 露出的 11px 刚好是耳朵(图里耳朵占顶部 6%~15%) */
+                        translate: 0 43px;
+                        transition: translate 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    }
+
+                    /* 延迟只写在 hover 上: 上来时一只只错开, 缩回去时一起走 */
+                    #gal-header .navbar-brand:hover .cat {
+                        translate: 0 0;
+                        transition-delay: calc(var(--i) * 60ms);
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        #gal-header .navbar-brand .cat {
+                            transition: none;
+                        }
+                        #gal-header .navbar-brand:hover .cat {
+                            transition-delay: 0s;
+                        }
+                    }
+                </style>
+                    
+                <div class="navbar-brand"><span class="cat" style="--i: 0"></span><span class="cat" style="--i: 1"></span><span class="cat" style="--i: 2"></span><span class="cat" style="--i: 3"></span><span class="cat" style="--i: 4"></span></div>
+                
+            </a>
+        </div>
+        <div class="collapse navbar-collapse bs-navbar-collapse">
+            <ul class="nav navbar-nav" id="menu-gal">
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/">
+                        <i class="fa fa-home"></i>首页
+                    </a>
+                </li>
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/archives">
+                        <i class="fa fa-archive"></i>归档
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-list"></i>分类
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86%E4%B8%93%E9%A2%98/">RSA加解密专题</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/">密码学数学原理</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90/">加解密模式分析</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/categories">全部分类</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                
+                <li class="dropdown">
+                    <!-- TODO 添加hover dropdown效果 -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                        <i class="fa fa-tags"></i>标签
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/RSA/">RSA</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags/%E5%89%8D%E8%A8%80/">前言</a>
+                        </li>
+                        
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="/SecurityBlog.github.io/tags">全部标签</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                
+                
+                
+                
+                <li class="">
+                    <a href="/SecurityBlog.github.io/about">
+                        <i class="fa fa-user"></i>关于我
+                    </a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="gal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 gal-right" id="mainstay">
+                    
+<article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://lr2006-robot.github.io/SecurityBlog.github.io">Fiex Reed</a>
+        >
+        <span>密码学数学基础 - 循环群与原根</span>
+    </div>
+    <!-- 大型设备详细文章 -->
+    <div class="hidden-xs">
+        <div class="title-article">
+            <h1>
+                <a href="/SecurityBlog.github.io/2026/10/20/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E5%BE%AA%E7%8E%AF%E7%BE%A4%E4%B8%8E%E5%8E%9F%E6%A0%B9/">密码学数学基础 - 循环群与原根</a>
+            </h1>
+        </div>
+        <div class="tag-article">
+            
+            <span class="label label-gal">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%95%B0%E5%AD%A6/">数学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/">抽象代数</a>
+                
+            </span>
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2026-10-20
+            </span>
+            
+        </div>
+    </div>
+    <!-- 小型设备详细文章 -->
+    <div class="visible-xs">
+        <center>
+            <div class="title-article">
+                <h4>
+                    <a href="/SecurityBlog.github.io/2026/10/20/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E5%BE%AA%E7%8E%AF%E7%BE%A4%E4%B8%8E%E5%8E%9F%E6%A0%B9/">密码学数学基础 - 循环群与原根</a>
+                </h4>
+            </div>
+            <p>
+                <i class="fa fa-calendar"></i> 2026-10-20
+            </p>
+            <p>
+                
+                <i class="fa fa-tags"></i>
+                
+                <a href="/SecurityBlog.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%95%B0%E5%AD%A6/">数学</a>, 
+                
+                <a href="/SecurityBlog.github.io/tags/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/">抽象代数</a>
+                
+                
+                
+            </p>
+        </center>
+    </div>
+    <div class="content-article">
+        <p>这一章是我们群论的最后一章，讲解循环群以及原根的内容，这部分的内容是直接和公钥密码体制和安全协议相关的，所以再结束这部分的内容后，可以去看最经典的非对称加密 RSA 算法、ElGamal 离散对数加密算法和 ECC 椭圆曲线加密等等。</p>
+<p>想必大家经过我们的学习会发现，我们所讲解的内容基本上没有进行太多的数学深入，只是简单的介绍重要的概念，稍微推导一些定理、性质等等，所以如果后续需要更加深入的学习群论，就要靠大家自行学习了。</p>
+<h2 id="循环群"><a href="#循环群" class="headerlink" title="循环群"></a>循环群</h2><p>循环群的概念先不着急，我们先来看一个构造子群的新方式。定理：设 $G$ 是群，$a \in G $，则 $<a>:&#x3D;{a^z|z \in Z}$ 是由 $a$ 生成的 $G$ 的子群。这个子群里面的元素都是直接由 $a$ 运算构成的，具有以 $a$ 为底的格式，这种子群我们就用 $<a>$ 表示。证明：$\forall a^i, a^j,\in <a>$，则 $a^i * (a^j)^{-1} &#x3D; a^{i-j} \in <a>$。</p>
+<p>现在可以介绍循环群（cyclic group）的定义了：设 $G$ 是群，$g \in G$，如果 $G &#x3D; <g>$，则称 $G$ 是循环群，$g$ 是循环群 $G$ 的生成元（generator）。由于很重要，我们可以举几个例子，也是密码学里面常用的：</p>
+<ol>
+<li>整数群 $Z$ 是加法循环群：$Z &#x3D; {z|z\in Z} &#x3D;{z \cdot 1|z\in Z}&#x3D;&lt;1&gt;&#x3D;{(-z)\cdot 1|z\in Z} &#x3D; {z \cdot (-1)|z\in Z} &#x3D; &lt;-1&gt;$</li>
+<li>$mZ$ 是加法循环群：$mZ &#x3D; {zm|z\in Z} &#x3D;{mz|z\in Z} &#x3D;<m>&#x3D;{(-z)m|z\in Z}&#x3D;{(-m)z|z\in Z} &#x3D;&lt;-m&gt;$</li>
+<li>$Z_5^<em>$ 是乘法循环群：$Z_5^</em> &#x3D; {1,2,3,4} &#x3D;&lt;2&gt;&#x3D;&lt;3&gt;$，$2^1&#x3D;2,2^2&#x3D;4,2^3&#x3D;3,3^4&#x3D;1$</li>
+</ol>
+<p>就像是之前群一样，对于循环群里面元素的个数问题，我们也可以分为无限循环群如 $(Z,mZ)$ 和有限循环群如 $(Z^*_5)$。当然，我们看前面可以发现，一个循环群可能是有多个生成元的，所以在公钥密码学中，我们经常会看见一句话：随机选择一个生成元。生成元的个数，对于有限循环群来说是可以算出来的，这个后面在说。对于无限循环群而言，生成元有且只有两个，这个可以自行去了解。</p>
+<p>下面我们来看一些定理，第一个定理：任意循环群都是阿贝尔群。证明：$\forall a, b \in <g>$，设 $a &#x3D; g^r,b &#x3D; g^k$，则 $a<em>b&#x3D;g^r</em>g^k&#x3D;g^{r+k} &#x3D; g^{k+r} &#x3D; g^k <em>g^r&#x3D;b</em>a$。</p>
+<p>第二个定理：循环群的子群是循环群。证明：设 $H$ 是 $<g>$ 的子群。$H &#x3D; {e}$ 或 $<g>$ 时，$H$ 是循环群。当 $H$ 是非平凡子群时，设 $d$ 时满足 $g^d \in H$ 的最小正整数，$\forall g^s \in H, s&gt;d$，令 $s&#x3D;qd+r,r&lt;d,(r&#x3D;s-qd,g^r \in H)$，则 $r&#x3D;0$，即 $d|s,g^s&#x3D;(g^d)^q\in H$。</p>
+<p>第三个定理：设 $G$ 是循环群，$H$ 是其子群，则商群 $G&#x2F;H$ 是循环群。证明：循环群是阿贝尔群，而阿贝尔群的子群都是正规子群，所以 $H$ 是正规子群，它可以构成商群。设 $G&#x3D;<g>$，则 $G&#x2F;H &#x3D;&lt;[g]_H&gt;$。因为 $\forall [g^k]_H \in G&#x2F;H$，有 $[g^k]_H &#x3D; [g*\cdots<em>g]_H &#x3D; [g]_H</em>\cdots[g]_H &#x3D;([g]_H)^k$。所以 $\forall [g^k]_H $ 都是由 $[g]_H$ 生成的，$[g]_H$ 是 $G&#x2F;H$ 的生成元。</p>
+<h2 id="元素的阶"><a href="#元素的阶" class="headerlink" title="元素的阶"></a>元素的阶</h2><p>元素的阶（order），这是个非常重要的概念，和密码加密算法联系紧密。定义：设 $G$ 是群，$a \in G$，如果 $n$ 是满足 $a^n &#x3D; e$ 的最小正整数，则称 $n$ 是元素 $a$ 的阶。这个表示的就是元素自己运算 $n$ 遍就到达了单位元，所以这个概念也可以理解成元素到单位元的距离。有些元素可能运算多少遍都到不了单位元，我们规定这些元素就是无限阶的。当然，不要把元素的阶和群的阶搞混了。</p>
+<p>这个概念也会引出不少有意思的性质，第一个性质显而易见的：$G$ 是群，元素 $a$ 的阶是 $n$，则 $\forall m \in Z$，有 $n|m \leftrightarrow a^m &#x3D;e$。这个证明简单，就不写全了：$m &#x3D; nq+r,r &lt; n,a^m &#x3D; a^{nq+r} &#x3D; (a^n)^q a^r &#x3D;a^r \neq e$。</p>
+<p>我们这里只考虑有限循环群，因为密码学里面用的基本上都是有限的这些东西。第二个性质：有限循环群的阶是 $n$，则生成元的阶也是 $n$，且群里元素 $g,g^2,g^3,\cdots,g^n(&#x3D;g^0&#x3D;e)$ 各不相同。这个是很直观的，循环群的元素都是由生成元生成的，生成元能生成几个元素，群里就有几个元素。所以生成元的产量就决定了群的大小，而生成元的直接取决于它的阶。因为产量一旦达到它的阶的大小，它再产生的就是以前生成过的元素了。证明：</p>
+<ul>
+<li>$g$ 的阶是 $n$：假设正整数 $m&lt;n$，使得 $g^m &#x3D; e$。$\forall g^k \in <g>$，有 $g^k &#x3D; g^{mq+r} &#x3D;g^r(k&#x3D;mq+r,r&lt;m)$。所以，群里最多 $m$ 个元素，与群的阶是 $n$ 矛盾。</li>
+<li>元素各不相同：假设 $g^i &#x3D;g^j(0&lt; j &lt; i \le m)$，则 $g^{i-j} &#x3D; g^{j-j} &#x3D; g^0&#x3D;e$，有 $g^{i-j} &#x3D; e$。因为 $i-j&lt;n$，而 $g$ 的阶是 $n$，则有 $g^{i-j} \neq e$，矛盾。</li>
+</ul>
+<p>第三个性质：正整数 $d|n$，$n$ 阶有限循环群恰有唯一的 $d$ 阶子群。证明：</p>
+<ul>
+<li>存在性：$d|n$，有 $g^{\frac{n}{d}}$ 的阶是 $d$，则子群 $&lt;g^{\frac{n}{d}}&gt;$ 的阶是 $d$。故而存在阶是 $d$ 的子群 $&lt;g^{\frac{n}{d}}&gt;$。</li>
+<li>唯一性：假设存在另一个 $d$ 阶的子群 $&lt;g^k&gt;$，则 $(g^k)^d &#x3D;e$，所以 $n|kd$，有 $\frac{n}{d}|k$。所以 $g^k \in &lt;g^{\frac{n}{d}}&gt;$，有 $&lt;g^k&gt;$ 是 $&lt;g^{\frac{n}{d}}&gt;$ 的子群。因为二者的阶都是 $d$，所以二者是同一个循环群。</li>
+</ul>
+<p>第四个性质：$n$ 阶有限循环群 $<g>$，$\forall k \in Z$，有 $g^k$ 的阶是 $\frac{n}{gcd(n,k)}$。证明：假设 $g^K$ 的阶是 $m$，则 $g^{km} &#x3D;e$，有 $n|km$。于是，$km &#x3D; lcm(n,k) &#x3D; \frac{nk}{gcd(n,k)}$。所以 $m &#x3D; \frac{n}{gcd(n,k)}$。</p>
+<p>第五个性质：$n$ 阶有限循环群有 $\phi(n)$ 个生成元。证明：根据上面这个性质，$g^k$ 的阶为 $\frac{n}{gcd(n,k)}$，当 $gcd(n,k)&#x3D;1$ 时，$g^k$ 的阶为 $n$，它为生成元。$<g>$ 的元素为 $g,g^2,g^3,\cdots,g^n$，有 $k&#x3D;1,\cdots,n$。与 $n$ 互素的 $k$ 一共有 $\phi(n)$ 个，即为生成元个数。</p>
+<p>第六个性质：$G$ 是有限群，元素 $a$ 的阶是 $|G|$ 的因子。证明：$<a>$ 是 $G$ 的子群。根据拉格朗日定理，有 $|<a>| | |G|$。因为生成元 $a$ 的阶等于 $<a>$ 的阶。所以 $a$ 的阶是 |G| 的因子。同时我们也可以得到 $a^{|G|}&#x3D;e$。</p>
+<p>第七个性质：素数阶的群必然是（有限）循环群。证明：设 $G$ 是群，且 $|G|&#x3D;p$，$p$ 是素数。设 $a \in G$，且 $a \neq e$，$a$ 的阶是 $k$。根据性质六，$k|p$。所以 $k&#x3D; 1$ or $p$。因为 $a \neq e$，所以 $k&#x3D;p$，即 $a$ 的阶是 $p$，有 $a$ 是生成元。所以 $G$ 是（有限）循环群，因为它有生成元。</p>
+<h2 id="循环群的同构"><a href="#循环群的同构" class="headerlink" title="循环群的同构"></a>循环群的同构</h2><p>同构的群本质上是同一个群，它们的结构性质完全一样。所以如果同构的群里面一个是循环群，另一个也会是循环群。那么群的元素 $a$ 同构的 $\rho(a)$ 实际上是一个东西，那么它们的阶是一样的，同时这两个生成的循环子群也是同一个东西，也就是 $\rho(<a>) &#x3D; {\rho(a^z)|z \in Z} &#x3D; {\rho(a)^z|z \in Z}&#x3D;&lt;\rho(a)&gt;$。</p>
+<p>通过群同构，我们可以对循环群进行分类。不论无限循环群长什么样，无限循环群同构于 $Z$，以及，任何 $n$ 阶有限循环群都同构于 $Z_n$。</p>
+<p>这个的证明是这样的：我们构造一个定义域是 $Z$，值域是个循环群。给定任意整数 $z$，它被映射成 $g^z$，这个映射其实是个群同态。循环群的元素都是 $g^z$ 的形式，而 $z$ 就对应定义域的一个整数，既然值域的每一个元素都有原像，这个映射还是个满同态，$\forall z,z’ \in Z,f(z+z’)&#x3D;g^{z+z’}&#x3D;g^z*g^{z’}&#x3D;f(z)*f(z’)$。</p>
+<p>我们根据同态核分两种情况讨论，如果同态核只包含单位元零，$Kerf&#x3D;{0}$。根据单一同态的判定方法，这肯定是个单射。同时满足满射和单射，那么这就是个群同构。因为 $Z$ 和这个循环群同构，可见这个循环群是个无限群。这就说明，任何无限循环群都同构于 $Z$，它们是 $Z$ 是同一个东西。</p>
+<p>另一方面，如果同态核还有别的元素，也就是 ${0} \subset Kerf$。$Z$ 的子群都对应一个都具有 $nZ$ 的格式。既然同态核是 $Z$ 的子群，同态核也就具有这种格式 ${0} \subset Kerf &#x3D;nZ$，因为同态核不同于 ${0}$ 这个平凡子群，所以同态核的这个 $n$ 就是个正整数。根据第一同构定理，利用这个群同态可以构造一个群同构，它的定义域是商群 $Z_n$，值域是这个循环群，它将剩余类 $[z]$ 映射称 $g^z$。因为两个群同构，而 $Z_n$ 是个有限群，所以这个循环群也是个有限群。$Z_n$ 有 $n$ 个元素，循环群也就有 $n$ 个元素，所以任何 $n$ 阶有限循环群都同构于 $Z_n$。</p>
+<p>因此，$Z$ 的性质就是无限循环群的性质，$Z_n$ 的性质就是 $n$ 阶有限循环群的性质，可以直接转移到任何同构的循环群上。这点很重要，是核心中的核心！！！</p>
+<p>在介绍子群的时候，讲了很多关于 $Z$ 和 $Z_n$ 的内容，比如 对于 $Z$ 的任意子群 $H$，都存在唯一的非负整数 $m$，使得 $H &#x3D; mz$。我们可以直接替换成无限循环群，得到无限循环群的一个性质：对于无限循环群 $G$ 的任意子群 $H$，都存在唯一的非负整数 $m$，使得 $H&#x3D;G^m$。</p>
+<p>又例如对于 $Z_n$ 的任意子群 $H$，都存在 $n$ 的唯一正因子 $m$，使得 $H&#x3D;mZ_n$。直接进行替换可以得到有限循环群的一个性质：对于 $n$ 阶有限循环群 $G$ 的任意子群 $H$，都存在 $n$ 的唯一正因子 $m$，使得 $H&#x3D; G^m$。</p>
+<p>所以，我们在研究无限循环群的时候，可以转而去研究 $Z$ 来实现突破，同理，研究 $n$ 阶有限循环群的时候可以转而去研究 $Z_n$。下面我们可以通过元素的阶的第八个性质来初步使用这种思想。</p>
+<p>第八个性质：$G$ 是 $n$ 阶有限循环群，$d$ 是 $n$ 的正因子，$G$ 里的 $d$ 阶元素一共有 $\phi(d)$ 个。这个证明呢，我们可以直接去研究 $Z_n$，那么我们只要知道 $Z_n$ 里面有多少个 $d$ 阶元素就知道了。$Z_n$ 是个加法循环群，它的单位元是 0，所以这些 $d$ 阶元素它们乘 $d$ 再模 $n$ 就等于 0。这些元素都包含在 $Z_n{d}$ 这个子群里，这是根据这个子群的定义来的，所以我们只要搞清楚这个子群里的 $d$ 阶元素有多少个就行了。既然 $Z_n$ 是循环群，则 $Z_n{d}$ 也是循环群，而且它里面有 $d$ 个元素，它就是个 $d$ 阶循环群，那它生成元的阶也都是 $d$，所以它里面的 $d$ 阶元素其实就是它的生成元。所以我们只需要知道这个子群有多少个生成元就可以了，它同构于 $Z_d$，有前面的定理知道 $\phi(d)$ 个。</p>
+<h2 id="原根"><a href="#原根" class="headerlink" title="原根"></a>原根</h2><p>关于循环群，再举一个 $Z^<em>_n$ 的例子，$n$ 是正整数，$Z^</em>_n &#x3D; {[a]|z\in Z,gcd(a,n)&#x3D;1}&#x3D;{a | a&#x3D;0. \cdots.n-1.gcd(a,n)&#x3D;1}$。模运算的一个重要概念是乘法阶（multiplicative order），定义：$a \in Z,gcd(a,n)&#x3D;1$，设 $k$ 是满足 $a^k \equiv 1 \mod n$ 的最小正整数，称 $k$ 是 $a$ 在模 $n$ 下的乘法阶。$a$ 在模 $n$ 下的乘法阶记为 $ord_n(a)$。</p>
+<p>$Z_n^<em>$ 的单位元是剩余类 $[1]$，乘法阶这个概念救可以理解成，$Z^</em>_n$ 的元素 $a$，它的乘法阶 $ord_n(a)$ 是满足 $a^{ord_n(a)} \equiv 1 \mod n$ 的最小正整数。由此可见，$Z^*_n$ 里 $a$ 的阶就是 $a$ 的乘法阶。所以乘法阶就是元素的阶这个概念的一个实例。</p>
+<p>另一个重要的概念是原根（primitive root），定义：$g \in Z, gcd(g,b)&#x3D;1$，如果 $ord_n(g)&#x3D; \phi(n)$，称 $g$ 是模 $n$ 下的原根。这也满足欧拉定理，$g$ 是模 $n$ 下的原根，则 $g^{ord_n(g)}&#x3D;g^{\phi(n)}&#x3D;1 \mod n$。</p>
+<p>同时，模 $n$ 下并不一定有原根，$\phi(n)$ 乘法阶的整数不一定存在，设 $p$ 是奇素数，$e$ 是正整数，$n&#x3D;1,2,4,p^e,2p^e$ 时，模 $n$ 下存在原根。设模 $n$ 下存在原根，原根的阶是 $\phi(n)$，$Z^<em>_n$ 的阶也是 $\phi(n)$。既然原根的乘法阶等于这个群的阶，原根就可以生成所有的元素，即原根就是生成元，则 $Z^</em>_n$ 是循环群。反过来想，也就是说只有 $n$ 满足上面的五种情况的时候，$Z^*_n$ 才是循环群。</p>
+<p>很明显，模数是个素数 $p$ 时，$Z^*_p$ 是个循环群，这个在密码学中出现次数很多，许多公钥密码体制都是通过这个来进行构造的。在很多的书里，乘法阶和原根的性质是在数论这部分就进行介绍了，它们的性质也是通过模运算的性质来解释的。但是，我还是认为将它作为群的实例，用抽象代数的知识来解释会更好一些，一般初等数论也是将这部分内容放入群论中讲解的。</p>
+<p>关于元素的阶，我们介绍了八个性质，这些很多套用到原根上面也是成立的，证明就不证了：</p>
+<ul>
+<li>性质 1：$\forall m \in Z$，有 $ord_n(a)|m \leftrightarrow a^m \equiv a \mod n$</li>
+<li>性质 2：$a,a^2,a^3,\cdots,a^{ord_n(a)} &#x3D; 1$ 各不相同</li>
+<li>性质 4：$\forall k \in Z$，$a^k$ 的乘法阶是 $\frac{a^{ord_n(a)}}{a^{ord_n(a)}，k}$，扩展到原根 $\forall k \in Z$，$g^k$ 的乘法阶是 $\frac{\phi(n)}{gcd(\phi(n),k)}$</li>
+<li>性质 5：模 $n$ 下原根有 $\phi(\phi(n))$ 个</li>
+<li>性质 6：$ord_n(a)|\phi(n)$</li>
+<li>性质 8：$d$ 是 $\phi(n)$ 的正因子，$Z^*_n$ 里的 $d$ 阶元素一共有 $\phi(d)$ 个</li>
+</ul>
+<p>寻找原根的话，我们从性质 6 出发 $\forall a \in Z^*_n \rightarrow ord_n(a)|\phi(n)$，如果 $a$ 是原根的话，那么就有 $ord_n(a)&#x3D;\phi(n)$。设 $\phi(n)&#x3D;p_1^{e_1}\cdots p_r^{e_r}$，如果 $a$ 不是原根，则 $\exists d | \phi(n), d&lt;\phi(n),a^d \equiv 1 \mod n$，那么就有 $\exists p_j,d|\frac{\phi(n)}{p_j} \rightarrow \exists q, dq &#x3D; \frac{\phi(n)}{p_j}$。所以，$a^d \equiv a \mod n \rightarrow a^{\frac{\phi(n)}{p_j}} \equiv a^{dq} \equiv (a^d)^q \equiv 1 \mod n$。所以我们得到 $a$ 是原根 $\leftrightarrow$ $a{\frac{\phi(n)}{p_i}} \not\equiv 1 \mod n, i&#x3D; a,\cdots,r$。</p>
+<p>有这个结论我们就可以写出来找原根的算法：</p>
+<ul>
+<li>因式分解 $\phi(n)$，求出各个素因子 $p_1,\cdots,p_r$</li>
+<li>任选 $a\in Z^*_n$</li>
+<li>if $a{\frac{\phi(n)}{p_i}} \not\equiv 1 \mod n, i&#x3D; a,\cdots,r$ output $a$ else goto second step</li>
+</ul>
+<h2 id="离散对数"><a href="#离散对数" class="headerlink" title="离散对数"></a>离散对数</h2><p>离散对数（discrete logarithm）的定义：$gcd(a,n)&#x3D;1$，必然存在唯一整数 $x(0\le x \le \phi(n))$，有 $a \equiv g^x \mod n$，则称 $x$ 是以 $g$ 为底的 $a$ 模 $n$ 的指标（index）或离散对数。简记为 $x &#x3D; log_g(a)$。</p>
+<p>离散对数在公钥密码学中非常常见，同时它也有很多有意思的性质，定理：$a \equiv g^r \mod n \leftrightarrow log_g(a) \equiv r \mod \phi(n)$。证明：设 $x &#x3D; log_g(a)$，则 $a \equiv g^x \mod n$。推导 $a \equiv g^r \mod n \leftrightarrow g^x equiv \mod n \leftrightarrow x \equiv r \mod \phi(n) \leftrightarrow log_g(a) \equiv r \mod \phi(n)$。这个可以推广到任意与模数互素的整数。</p>
+<p>既然都叫“对数”了，那么我们也可以类比以前学习的对数的运算，设 $gcd(b,n) &#x3D; 1,y &#x3D; log_g(b)$，$m$ 是正整数，$h$ 也是原根。下面的运算法则证明就不证了，很简单，自己写写试试：</p>
+<ul>
+<li>$log_g(ab) \equiv log_g(a) + log_g(b) \mod \phi(n)$</li>
+<li>$log_g(a^m) \equiv m \times log_g(a) \mod \phi(n)$</li>
+<li>$log_h(a) \equiv log_h(g) \times log_g(a) \mod \phi(n)$</li>
+</ul>
+<p>至于为什么说离散，举个例子，在模数为 $p &#x3D; 17627$ 和原根 $g &#x3D; 6$ 的情况下，其幂次的结果是非常离散的，没有规律可言，点在到处乱飞，如下图：（仅列举100个）<br><img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERX1VppTeVRVK4axMcdUV3DaG8zrpSmQACRSIAAtluKVUdgW7WLoLmQzoE.png" alt="离散对数问题示例"></p>
+<p>我们看到，原根扮演了非常重要的角色，离开原根而谈论离散对数显然是不合适的。事实上，模数是奇素数的循环群在密码学里应用非常广泛，所以找模 $p$ 下原根的算法就非常重要了。不过遗憾的是，关于找原根这个问题，目前没有什么高效的算法，除非已经知道阶的素因子分解。即使如此，目前也必须求助于概率算法。</p>
+<p>简单介绍，不做详细说明。看两个定理以及由它们推导出的概率算法：</p>
+<ul>
+<li>设 $G$ 是群，$c \in G$，对于某个素数 $p$ 和整数 $e \ge 1$，如果 $c^{p^e}&#x3D;e$ 但是 $c^{p^{e-1}} \neq e$，则 $c$ 的阶是 $p^e$。</li>
+<li>设 $G$ 是群，$c_1,c_2 \in G$，$c_1,c_2$ 的阶分别为 $m_1,m_2$，且 $gcd(m_1,m_2)&#x3D;1$，则 $c_1*c_2$ 的阶是 $m_1m_2$</li>
+</ul>
+<p>for i&#x3D;1 tor<br>{<br>$\quad$do{<br>$\quad$$\quad$任选 $a \in Z^*<em>n$<br>$\quad$$\quad$} while($a^{\frac{p-1}{p_i}} \equiv 1 \mod p$)<br>$\quad$$c_i \equiv a^{p_i^{\frac{p-1}{e_i}}} \mod p$<br>}<br>output $$\prod</em>{i&#x3D;1}^k c_i \mod p$</p>
+<p>离散对数问题（DLP， discrete logarithm problem），定义：设 $G$ 是循环群，$g \in G$ 是生成元，对于 $y \in G$ 和正整数 $x$，有 $y &#x3D; g^x$，则离散对数问题定义为：给定 $y$ 和 $g$，求 $x(&#x3D;log_g(y))$。</p>
+<p>上一章：<a href="/SecurityBlog.github.io/2026/10/18/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E7%BE%A4%E5%90%8C%E6%80%81/" title="密码学数学基础 - 群同态">密码学数学基础 - 群同态</a><br>下一章：<a href="/SecurityBlog.github.io/2026/10/22/%E5%AF%86%E7%A0%81%E5%AD%A6%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%20-%20%E7%8E%AF/" title="密码学数学基础 - 环">密码学数学基础 - 密码学数学基础 - 环</a><br>回到开始：<a href="/SecurityBlog.github.io/about/">关于我</a></p>
+<p>相关链接：</p>
+<a href="/SecurityBlog.github.io/2026/03/01/%E5%8A%A0%E8%A7%A3%E5%AF%86%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%20-%20ElGamal%20%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" title="加解密模式分析 - ElGamal 加密算法">加解密模式分析 - ElGamal 加密算法</a>
+
+    </div>
+</article>
+
+
+<script>
+// 等页面加载完成后执行
+window.addEventListener('load', function() {
+  const content = document.querySelector('.content-article');
+  const tocList = document.getElementById('toc-list');
+  const tocPanel = document.getElementById('toc-panel');
+  
+  // 如果没有文章内容，隐藏目录
+  if (!content || !tocList) {
+    if (tocPanel) tocPanel.style.display = 'none';
+    return;
+  }
+
+  // 获取所有h2、h3、h4标题（Markdown的##/###/####）
+  const headers = content.querySelectorAll('h2, h3, h4');
+  if (headers.length === 0) {
+    if (tocPanel) tocPanel.style.display = 'none';
+    return;
+  }
+
+  // 清空目录
+  tocList.innerHTML = '';
+
+  // 生成目录项
+  headers.forEach((header, index) => {
+    // 给标题加id（如果Hexo没自动生成的话）
+    if (!header.id) {
+      header.id = 'toc-' + index;
+    }
+
+    const li = document.createElement('li');
+    // 根据标题级别加类名，实现缩进
+    if (header.tagName === 'H3') {
+      li.classList.add('toc-level-3');
+    } else if (header.tagName === 'H4') {
+      li.classList.add('toc-level-4');
+    }
+
+    const a = document.createElement('a');
+    a.href = '#' + header.id;
+    a.textContent = header.textContent;
+    // 点击跳转（平滑滚动）
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  // 滚动监听，高亮当前目录项
+  const tocItems = tocList.querySelectorAll('li');
+  const headerList = Array.from(headers);
+
+  window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    let currentIndex = 0;
+
+    // 找到当前滚动位置对应的标题
+    for (let i = 0; i < headerList.length; i++) {
+      const headerTop = headerList[i].offsetTop - 100;
+      if (scrollTop >= headerTop) {
+        currentIndex = i;
+      }
+    }
+
+    // 高亮当前项
+    tocItems.forEach((item, index) => {
+      if (index === currentIndex) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  });
+});
+</script>
+
+
+                </div>
+                <aside class="col-md-4 gal-left" id="sidebar">
+    <!-- 🔥 仅文章详情页（layout=post）显示目录，隐藏其他模块 -->
+    
+        <div class="panel panel-gal" id="toc-panel">
+          <div class="panel-heading">
+            <i class="fa fa-list-ul"></i> 文章目录
+            <span class="panel-toggle" data-toggle="collapse" data-target="#toc-list">
+              <i class="fa fa-chevron-up"></i>
+            </span>
+          </div>
+          <ul class="list-group collapse in" id="toc-list">
+            <!-- JS会自动在这里生成目录项 -->
+          </ul>
+        </div>
+    
+</aside>
+            </div>
+        </div>
+    </div>
+    <footer id="gal-footer">
+    <div class="container">
+        Copyright © 2018 Dorange Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.&nbsp;Theme by <a href="https://github.com/ZEROKISEKI" target="_blank">AONOSORA</a>
+    </div>
+</footer>
+
+<!-- 回到顶端 -->
+<div id="gal-gotop">
+    <i class="fa fa-angle-up"></i>
+</div>
+</body>
+
+<script src="/SecurityBlog.github.io/js/activate-power-mode.js"></script>
+
+<script>
+
+    // 配置highslide
+	hs.graphicsDir = '/js/highslide/graphics/'
+    hs.outlineType = "rounded-white";
+    hs.dimmingOpacity = 0.8;
+    hs.outlineWhileAnimating = true;
+    hs.showCredits = false;
+    hs.captionEval = "this.thumb.alt";
+    hs.numberPosition = "caption";
+    hs.align = "center";
+    hs.transitions = ["expand", "crossfade"];
+    hs.lang.number = '共%2张图, 当前是第%1张';
+    hs.addSlideshow({
+      interval: 5000,
+      repeat: true,
+      useControls: true,
+      fixedControls: "fit",
+      overlayOptions: {
+        opacity: 0.75,
+        position: "bottom center",
+        hideOnMouseOut: true
+      }
+    })
+
+    // 初始化aos
+    AOS.init({
+      duration: 1000,
+      delay: 0,
+      easing: 'ease-out-back'
+    });
+
+</script>
+<script>
+	POWERMODE.colorful = 'true';    // make power mode colorful
+	POWERMODE.shake = 'true';       // turn off shake
+	// TODO 这里根据具体情况修改
+	document.body.addEventListener('input', POWERMODE);
+</script>
+<script>
+    window.slideConfig = {
+      prefix: '/SecurityBlog.github.io/imgs/slide/background',
+      ext: 'jpg',
+      maxCount: '14'
+    }
+    window.doroImg = '/SecurityBlog.github.io/imgs/doro.jpg'
+    window.doroLive2D = {
+      model: '/SecurityBlog.github.io/imgs/Dororong_Meme_Live2D_Model__By_0x4682B4_/Doro/Doro.model3.json',
+      js: [
+        '/SecurityBlog.github.io/js/live2d/live2dcubismcore.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi.min.js',
+        '/SecurityBlog.github.io/js/live2d/pixi-live2d-display.min.js'
+      ]
+    }
+</script>
+
+<!-- 不蒜子: 访客数/浏览量统计, 数据经第三方服务器(busuanzi.ibruce.info) -->
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/SecurityBlog.github.io/js/hs.js"></script>
+<script src="/SecurityBlog.github.io/js/blog.js"></script>
+
+
+
+
+</html>
