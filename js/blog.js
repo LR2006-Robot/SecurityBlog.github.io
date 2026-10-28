@@ -36,6 +36,24 @@
 		$(this).css('backgroundImage', 'url(\'' + prefix + slideList[i] + ext + '\')')
 	})
 
+	// 轮播开关: 没点过就跟随系统的"减少动态效果", 点过以后记在 localStorage
+	var slideToggle = $('#gal-slide-toggle')
+	function setSlideOff(off) {
+		$('html').toggleClass('slide-off', off)
+		slideToggle.attr('title', off ? '恢复背景轮播' : '暂停背景轮播')
+			.find('i').attr('class', off ? 'fa fa-play' : 'fa fa-pause')
+	}
+	var savedSlide = null
+	try { savedSlide = localStorage.getItem('slide-off') } catch (e) {}
+	setSlideOff(savedSlide === null
+		? !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
+		: savedSlide === '1')
+	slideToggle.on('click', function () {
+		var off = !$('html').hasClass('slide-off')
+		setSlideOff(off)
+		try { localStorage.setItem('slide-off', off ? '1' : '0') } catch (e) {}
+	})
+
 	// ------- 处理背景图结束 -----------
 
 	var panelToggle = $('.panel-toggle')
